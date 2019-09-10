@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -12,6 +12,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.6.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +23,38 @@
     <Content Remove="$(SpaRoot)**" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\src\App.tsx" />
+    <None Remove="ClientApp\src\ApplicationViews.tsx" />
+    <None Remove="ClientApp\src\Components\Auth\AuthenticatedRoute.tsx" />
+    <None Remove="ClientApp\src\Context\actions.ts" />
+    <None Remove="ClientApp\src\Context\ActionTypes.ts" />
+    <None Remove="ClientApp\src\Context\AuthContext.tsx" />
+    <None Remove="ClientApp\src\Context\AuthContextProvider.tsx" />
+    <None Remove="ClientApp\src\Context\file.tsx" />
+    <None Remove="ClientApp\src\Context\Interfaces.ts" />
+    <None Remove="ClientApp\src\Interfaces\IActionResult.ts" />
+    <None Remove="ClientApp\src\Interfaces\IAuthActions.ts" />
+    <None Remove="ClientApp\src\Interfaces\IAuthContext.ts" />
+    <None Remove="ClientApp\src\Interfaces\IAuthStatus.ts" />
+    <None Remove="ClientApp\src\Layout\file.tsx" />
+    <None Remove="ClientApp\src\Layout\Navbar\Navbar.tsx" />
+    <None Remove="ClientApp\src\Interfaces\IUserCredentials.ts" />
+    <None Remove="ClientApp\src\Utility\validateEmail.ts" />
+    <None Remove="ClientApp\src\theme.ts" />
+    <None Remove="ClientApp\src\Views\Homepage\Index.tsx" />
+    <None Remove="ClientApp\src\Views\Login\Login.tsx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\Layout\SidePanel\" />
+    <Folder Include="ClientApp\src\Types\" />
+    <Folder Include="ClientApp\src\Views\MessagePanel\" />
+    <Folder Include="ClientApp\src\Views\Settings\" />
+    <Folder Include="ClientApp\src\Views\Register\" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
