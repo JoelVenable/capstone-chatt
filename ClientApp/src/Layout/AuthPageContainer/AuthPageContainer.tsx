@@ -1,18 +1,16 @@
-﻿import * as React from 'react'
-import { Container } from '@material-ui/core'
-import { WelcomeBanner } from '../WelcomeBanner/WelcomeBanner'
+﻿import * as React from "react";
+import { Container } from "@material-ui/core";
+import { WelcomeBanner } from "../WelcomeBanner/WelcomeBanner";
 
-interface Props {
-    children?: React.ReactChildren
-}
+const AuthPageContainer: React.FC<React.PropsWithChildren<{}>> = ({
+  children
+}: React.PropsWithChildren<{}>) => (
+  <div>
+    <WelcomeBanner />
+    <Container maxWidth="xs" style={{ marginTop: "2rem" }}>
+      {children}
+    </Container>
+  </div>
+);
 
-const AuthPageContainer: React.FC<Props> = ({ children }: Props) => (
-    <div>
-        <WelcomeBanner />
-        <Container maxWidth="xs" style={{ marginTop: '2rem' }}>
-            {children}
-        </Container>
-    </div>
-)
-
-export { AuthPageContainer } 
+export { AuthPageContainer };
