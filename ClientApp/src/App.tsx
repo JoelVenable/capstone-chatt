@@ -1,3 +1,4 @@
+import { hot } from 'react-hot-loader/root'
 import * as React from 'react';
 import { AuthContextProvider } from './Context/AuthContextProvider';
 import Navbar from './Layout/Navbar/Navbar';
@@ -24,7 +25,7 @@ const App: React.FC = () => {
     );
 }
 
-export default App;
+export default hot(App);
 
 
         //        <Navbar />

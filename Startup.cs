@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -88,12 +87,6 @@ namespace Chatt
             {
                 app.UseDeveloperExceptionPage();
 
-                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions()
-                {
-                    ReactHotModuleReplacement = true,
-                    HotModuleReplacement = true
-                    
-                });
             }
             else
             {
@@ -109,7 +102,7 @@ namespace Chatt
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Models", @"Resources")),
                 RequestPath = new PathString("/Resources")
             });
             app.UseSpaStaticFiles();
@@ -127,7 +120,8 @@ namespace Chatt
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+                    //spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
         }

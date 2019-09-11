@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptSourceMap>false</TypeScriptSourceMap>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
@@ -13,10 +14,17 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.6.2">
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="2.2.7" />
+    <PackageReference Include="Microsoft.TypeScript.Compiler" Version="3.1.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.6.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="React.AspNet" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,15 +44,16 @@
     <None Remove="ClientApp\src\Context\AuthContextProvider.tsx" />
     <None Remove="ClientApp\src\Context\file.tsx" />
     <None Remove="ClientApp\src\Context\Interfaces.ts" />
+    <None Remove="ClientApp\src\Context\useAuthContext.ts" />
     <None Remove="ClientApp\src\DataAccess\Endpoint.ts" />
     <None Remove="ClientApp\src\DataAccess\Repository.ts" />
-    <None Remove="ClientApp\src\Interfaces\IActionResult.ts" />
-    <None Remove="ClientApp\src\Interfaces\IAuthActions.ts" />
-    <None Remove="ClientApp\src\Interfaces\IAuthContext.ts" />
-    <None Remove="ClientApp\src\Interfaces\IAuthStatus.ts" />
+    <None Remove="ClientApp\src\Interfaces\IActionResult.d.ts" />
+    <None Remove="ClientApp\src\Interfaces\IAuthActions.d.ts" />
+    <None Remove="ClientApp\src\Interfaces\IAuthContext.d.ts" />
+    <None Remove="ClientApp\src\Interfaces\IAuthStatus.d.ts" />
+    <None Remove="ClientApp\src\Interfaces\IUserCredentials.d.ts" />
     <None Remove="ClientApp\src\Layout\file.tsx" />
     <None Remove="ClientApp\src\Layout\Navbar\Navbar.tsx" />
-    <None Remove="ClientApp\src\Interfaces\IUserCredentials.ts" />
     <None Remove="ClientApp\src\Utility\validateEmail.ts" />
     <None Remove="ClientApp\src\theme.ts" />
     <None Remove="ClientApp\src\Views\Homepage\Index.tsx" />

@@ -1,8 +1,5 @@
 ﻿import * as React from 'react';
 import { AuthContext } from './AuthContext';
-import { IAuthActions } from '../Interfaces/IAuthActions';
-import { IAuthStatus } from '../Interfaces/IAuthStatus';
-import { IAction } from '../Interfaces/IAction';
 
 
 
@@ -35,10 +32,12 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
 
 
     const actions = React.useMemo<IAuthActions>(() => ({
-        signIn: (cred) => { },
-        signUp: (cred) => { },
-        signOut: () => { },
-        changePassword: (old, newp) => { }
+        signIn: async (cred): Promise<void> => {
+
+        },
+        signUp: async (cred): Promise<void> => { },
+        signOut: async (): Promise<void> => { },
+        changePassword: async (old, newp): Promise<void> => { }
     }), []);
 
 

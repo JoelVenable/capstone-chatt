@@ -1,6 +1,4 @@
 ﻿import * as React from 'react'
-import { IAuthContext } from '../Interfaces/IAuthContext'
-import { IUserCredentials } from '../Interfaces/IUserCredentials'
 
 
 
@@ -11,10 +9,10 @@ export const AuthContext: React.Context<IAuthContext> = React.createContext({
         userEmail: undefined
     },
     actions: {
-        signIn: (credentials: IUserCredentials): Promise<void> => { },
-        signUp: (credentials: IUserCredentials): Promise<void> => { },
-        signOut: () => { },
-        changePassword: (oldPassword, newPassword) => { }
+        signIn: async (cred) => { },
+        signUp: async (cred) => { },
+        signOut: async () => { },
+        changePassword: async (old, newp) => { }
     }
 } as IAuthContext)
 

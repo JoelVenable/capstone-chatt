@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Navbar: React.FC = () => {
     const classes = useStyles({})
-    const { status: { isAuthenticated }, actions: { signOut } } = React.useContext(AuthContext)
+    const { status: { isAuthenticated }, actions } = React.useContext(AuthContext)
 
     return (
         <div className={classes.root}>

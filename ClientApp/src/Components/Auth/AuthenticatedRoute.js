@@ -1,14 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
-var react_router_dom_1 = require("react-router-dom");
-var AuthContext_1 = require("../../Context/AuthContext");
-var AuthenticatedRoute = function (_a) {
-    var path = _a.path, exact = _a.exact, component = _a.component, render = _a.render;
-    var _b = React.useContext(AuthContext_1.AuthContext).status, isAuthenticated = _b.isAuthenticated, authResolving = _b.authResolving;
+import * as React from 'react';
+import { Route } from 'react-router-dom';
+import { AuthContext } from '../../Context/AuthContext';
+const AuthenticatedRoute = ({ path, exact, component, render }) => {
+    const { status: { isAuthenticated, authResolving } } = React.useContext(AuthContext);
     if (authResolving)
         return React.createElement(React.Fragment, null, " ");
-    return React.createElement(react_router_dom_1.Route, { path: path, exact: exact, component: component });
+    return React.createElement(Route, { path: path, exact: exact, component: component });
 };
-exports.default = AuthenticatedRoute;
+export default AuthenticatedRoute;
 //# sourceMappingURL=AuthenticatedRoute.js.map
