@@ -1,18 +1,23 @@
-﻿import * as React from 'react'
-
-
+﻿import * as React from "react";
 
 export const AuthContext: React.Context<IAuthContext> = React.createContext({
-    status: {
-        isAuthenticated: false,
-        authResolving: true,
-        userEmail: undefined
+  status: {
+    isAuthenticated: false,
+    authResolving: true,
+    userEmail: undefined
+  },
+  actions: {
+    signIn: async cred => {
+      return { response: "FAILURE" } as IActionResult;
     },
-    actions: {
-        signIn: async (cred) => { },
-        signUp: async (cred) => { },
-        signOut: async () => { },
-        changePassword: async (old, newp) => { }
+    signUp: async cred => {
+      return { response: "FAILURE" } as IActionResult;
+    },
+    signOut: async () => {
+      return { response: "FAILURE" } as IActionResult;
+    },
+    changePassword: async (old, newp) => {
+      return { response: "FAILURE" } as IActionResult;
     }
-} as IAuthContext)
-
+  }
+} as IAuthContext);
