@@ -7,6 +7,7 @@
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+    <StartupObject>Chatt.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,6 +36,8 @@
     <None Remove="ClientApp\src\Context\AuthContextProvider.tsx" />
     <None Remove="ClientApp\src\Context\file.tsx" />
     <None Remove="ClientApp\src\Context\Interfaces.ts" />
+    <None Remove="ClientApp\src\DataAccess\Endpoint.ts" />
+    <None Remove="ClientApp\src\DataAccess\Repository.ts" />
     <None Remove="ClientApp\src\Interfaces\IActionResult.ts" />
     <None Remove="ClientApp\src\Interfaces\IAuthActions.ts" />
     <None Remove="ClientApp\src\Interfaces\IAuthContext.ts" />
@@ -54,7 +57,7 @@
     <Folder Include="ClientApp\src\Views\MessagePanel\" />
     <Folder Include="ClientApp\src\Views\Settings\" />
     <Folder Include="ClientApp\src\Views\Register\" />
-    <Folder Include="Controllers\" />
+    <Folder Include="Models\Resources\Images\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
@@ -81,5 +84,21 @@
       </ResolvedFileToPublish>
     </ItemGroup>
   </Target>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptTarget>ES2015</TypeScriptTarget>
+    <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
+    <TypeScriptModuleKind>ES6</TypeScriptModuleKind>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
 
 </Project>
