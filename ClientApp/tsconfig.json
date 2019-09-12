@@ -15,7 +15,7 @@
     "noEmit": true,
     "jsx": "react"
   },
-  "typeRoots": ["node_modules/@types", "src/Types"],
+  "typeRoots": ["node_modules/@types", "src/Types/**"],
   "exclude": ["node_modules"],
   "include": ["**/*"]
 }

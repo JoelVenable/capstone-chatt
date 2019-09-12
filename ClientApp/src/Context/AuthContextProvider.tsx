@@ -17,10 +17,28 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
           isAuthenticated: true,
           userEmail: actions.email
         };
+      case "RESOLVE_LOGGED_IN":
+        return {
+          ...state,
+          isAuthenticated: true,
+          userEmail: actions.email
+        };
+      case "RESOLVE_NOT_LOGGED_IN":
+        return {
+          ...state,
+          isAuthenticated: false,
+          userEmail: undefined
+        };
+
+      case "SIGN_OUT":
+        return {
+          ...state,
+          isAuthenticated: false,
+          userEmail: undefined
+        };
       default:
         throw new Error("Unhandled reducer action in Auth Context");
     }
-    return state;
   };
 
   const [status, setStatus] = React.useReducer(reducer, {
@@ -31,8 +49,12 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
 
   React.useEffect(() => {
     //  resolve auth
+    const endpoint = new Endpoint("");
+    const profile = endpoint.getProfile();
+    if (profile) {
+      setStatus({ type: "RESOLVE_LOGGED_IN", email: profile.email });
+    } else setStatus({ type: "RESOLVE_NOT_LOGGED_IN" });
   }, []);
-
 
   const actions = React.useMemo<IAuthActions>(
     () => ({
