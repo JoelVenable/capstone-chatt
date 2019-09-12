@@ -2,4 +2,5 @@
 
 interface IActionResult {
   response: ActionResult;
+  email?: string
 }
