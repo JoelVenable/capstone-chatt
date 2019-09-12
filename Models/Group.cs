@@ -12,6 +12,8 @@ namespace Chatt.Models
 
         public bool IsPrivate { get; set; }
 
+        public bool IsProtected { get; set; }
+
         public ICollection<GroupUser> GroupUsers { get; set; }
 
         public ICollection<Message> Messages { get; set; }
