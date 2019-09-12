@@ -4,9 +4,9 @@ import { RouteComponentProps } from "react-router-dom";
 import { Grid, withWidth } from "@material-ui/core";
 import { WithWidth } from "@material-ui/core/withWidth";
 
-import GroupPanel from "../GroupPanel/GroupPanel";
+import GroupPanel from "../../Layout/GroupPanel/GroupPanel";
 
-interface Props extends RouteComponentProps<WithWidth> {}
+interface Props extends RouteComponentProps, WithWidth {}
 
 const Homepage: React.FC<Props> = ({ width }: Props) => {
   const [drawerOpen, setDrawerOpen] = useState(true);
@@ -25,9 +25,7 @@ const Homepage: React.FC<Props> = ({ width }: Props) => {
 
   return (
     <Grid container>
-      <Grid item cols={1}>
-        <GroupPanel />
-      </Grid>
+      <GroupPanel />
     </Grid>
   );
 };

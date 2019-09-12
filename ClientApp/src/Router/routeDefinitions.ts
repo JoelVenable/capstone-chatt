@@ -1,5 +1,6 @@
 export const routeDefinitions = {
   HOMEPAGE: "/",
   LOGIN: "/auth/login",
-  REGISTER: "/auth/register"
+  REGISTER: "/auth/register",
+  GROUP_DETAIL: "/groups/:groupName"
 };
