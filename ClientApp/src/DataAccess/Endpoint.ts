@@ -14,9 +14,14 @@ with the following methods:
 
 import decode from "jwt-decode";
 import moment from "moment";
+import { IGroup } from "../Types/Models/IGroup";
 
 const baseURL = `/api`;
-const LS_ITEM = "id_token";
+
+const sessionVars = {
+  TOKEN: "id_token",
+  EXPIRATION: "id_expiration"
+};
 
 const endpoints = {
   LOGIN: "/api/auth/login",
@@ -32,27 +37,32 @@ export class Endpoint<T, R> {
     this.endpointURL = `${baseURL}/${extension}`;
   }
 
-  private setToken = (idToken: string): void =>
-    localStorage.setItem(LS_ITEM, idToken);
-  private getToken = () => localStorage.getItem(LS_ITEM);
-  logout = (): void => localStorage.removeItem(LS_ITEM);
+  private setToken = (response: IToken): void => {
+    localStorage.setItem(sessionVars.TOKEN, response.token);
+    localStorage.setItem(sessionVars.EXPIRATION, response.expiration);
+  };
+  private getToken = () => localStorage.getItem(sessionVars.TOKEN);
+  logout = (): void => localStorage.removeItem(sessionVars.TOKEN);
 
-  login = async (cred: IUserCredentials): Promise<IActionResult> => {
+  loginOrRegister = async (
+    cred: IUserCredentials | IUserRegistration
+  ): Promise<IActionResult> => {
     const request = new Request(endpoints.LOGIN, {
       method: "POST",
       body: JSON.stringify(cred),
       headers: this.buildHeaders()
     });
-
-    const result = await fetch(request)
-      .then(this.checkStatus)
-      .then(response => response.json())
-      .then(res => {
-        this.setToken(res.token);
-        return Promise.resolve(res);
-      });
-    console.log(result);
-
+    try {
+      await fetch(request)
+        .then(this.checkStatus)
+        .then(response => response.json())
+        .then(res => {
+          this.setToken(res);
+        });
+    } catch (e) {
+      console.log(e);
+      return { response: "FAILURE" };
+    }
     return { response: "SUCCESS" };
   };
 
@@ -92,33 +102,93 @@ export class Endpoint<T, R> {
     return requestHeaders;
   };
 
-  // fetch = (urlArgs: string = "", options: ResponseInit): Promise<R> => {
-  //   const headers = this.buildHeaders(options);
+  fetch = async (urlArgs?: string, options?: ResponseInit): Promise<T> => {
+    const url = urlArgs ? this.endpointURL + urlArgs : this.endpointURL;
 
-  //   return fetch(`${this.endpointURL}/${urlArgs}`, headers)
-  //     .then(this.checkStatus)
-  //     .then(response => response.json());
-  // };
+    const request = new Request(url, {
+      method: "GET",
+      headers: this.buildHeaders(),
+      ...options
+    });
 
-  // getProfile = () => decode(this.getToken());
+    return fetch(request)
+      .then(r => r.json())
+      .then(r => r as T);
+  };
 
-  // private endpointUrl: string;
+  post = async (obj: T, urlArgs: string = ""): Promise<IActionResult> => {
+    const url = this.endpointURL + urlArgs;
+    const request = new Request(url, {
+      method: "POST",
+      headers: this.buildHeaders(),
+      body: JSON.stringify(obj)
+    });
+    try {
+      await fetch(request)
+        .then(this.checkStatus)
+        .then(r => r.json());
+      return { response: "SUCCESS" };
+    } catch (e) {
+      console.log(e);
+      return { response: "FAILURE" };
+    }
+  };
 
-  // constructor(urlExtension: string) {
-  //   this.endpointUrl = `${this.baseURL}/${urlExtension}`;
-  // }
+  patch = async (obj: T, urlArgs: string = ""): Promise<IActionResult> => {
+    const url = this.endpointURL + urlArgs;
+    const request = new Request(url, {
+      method: "PATCH",
+      headers: this.buildHeaders(),
+      body: JSON.stringify(obj)
+    });
+    try {
+      await fetch(request)
+        .then(this.checkStatus)
+        .then(r => r.json());
+      return { response: "SUCCESS" };
+    } catch (e) {
+      console.log(e);
+      return { response: "FAILURE" };
+    }
+  };
 
-  // post(url: string, obj: T): Promise<R> {
-  //   const urlToSend = `${this.endpointUrl}/${url}`;
-  //   console.log(urlToSend);
-  //   return this.fetch(urlToSend, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify(obj)
-  //   }).then(response => response.json());
-  // }
+  put = async (obj: T, urlArgs: string): Promise<IActionResult> => {
+    const url = this.endpointURL + urlArgs;
+    const request = new Request(url, {
+      method: "PUT",
+      headers: this.buildHeaders(),
+      body: JSON.stringify(obj)
+    });
+
+    try {
+      await fetch(request).then(this.checkStatus);
+      return { response: "SUCCESS" };
+    } catch (e) {
+      console.log(e);
+      return { response: "FAILURE" };
+    }
+  };
+
+  delete = async (urlArgs: string): Promise<IActionResult> => {
+    const url = this.endpointURL + urlArgs;
+    const request = new Request(url, {
+      method: "DELETE",
+      headers: this.buildHeaders()
+    });
+
+    try {
+      await fetch(request).then(this.checkStatus);
+      return { response: "SUCCESS" };
+    } catch (e) {
+      console.log(e);
+      return { response: "FAILURE" };
+    }
+  };
+
+  getProfile = () => {
+    const token = this.getToken();
+    if (token) return decode(token);
+  };
 }
 
 //  this.getAll = params => fetch(url + (params || ''))

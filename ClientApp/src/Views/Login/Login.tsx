@@ -29,7 +29,6 @@ const LoginView = withRouter(({ history }) => {
   const handleSubmit = async (e: React.SyntheticEvent): Promise<void> => {
     e.preventDefault();
     setLoading(true);
-    debugger;
     const credentials: IUserCredentials = { username: email, password };
     const { response } = await actions.signIn(credentials);
 

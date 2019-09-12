@@ -1,21 +1,35 @@
-﻿import * as React from "react";
+﻿import React, { useState, useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
 
-const Homepage: React.FC<RouteComponentProps<any>> = () => {
+import { Grid, withWidth } from "@material-ui/core";
+import { WithWidth } from "@material-ui/core/withWidth";
+
+import GroupPanel from "../GroupPanel/GroupPanel";
+
+interface Props extends RouteComponentProps<WithWidth> {}
+
+const Homepage: React.FC<Props> = ({ width }: Props) => {
+  const [drawerOpen, setDrawerOpen] = useState(true);
+
+  let toggleOpen = () => setDrawerOpen(!drawerOpen);
+
+  useEffect(() => {
+    if (width === "md" || width === "lg" || width === "xl") {
+      // Disable controls
+      toggleOpen = () => {};
+      setDrawerOpen(true);
+    } else {
+      toggleOpen = () => setDrawerOpen(!drawerOpen);
+    }
+  }, [width, drawerOpen]);
+
   return (
-    <header className="App-header">
-      <p>
-        Edit <code>src/App.js</code> and save to reload.
-      </p>
-      <a
-        className="App-link"
-        href="https://reactjs.org"
-        target="_blank"
-        rel="noopener noreferrer">
-        Learn React
-      </a>
-    </header>
+    <Grid container>
+      <Grid item cols={1}>
+        <GroupPanel />
+      </Grid>
+    </Grid>
   );
 };
 
-export default Homepage;
+export default withWidth()(Homepage);
