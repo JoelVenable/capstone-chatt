@@ -8,6 +8,8 @@ using Chatt.Data;
 using Chatt.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace Chatt.Controllers
 {
@@ -17,11 +19,25 @@ namespace Chatt.Controllers
     public class MessagesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public MessagesController(ApplicationDbContext context)
+        private async Task<ApplicationUser> GetActiveUser()
         {
+            ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
+            if (principal != null)
+            {
+                return await _userManager.GetUserAsync(principal);
+            }
+            else return null;
+        }
+
+        public MessagesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        {
+            _userManager = userManager;
             _context = context;
         }
+
+        
 
         // GET: api/Messages
         [HttpGet]
@@ -46,7 +62,7 @@ namespace Chatt.Controllers
 
         // PUT: api/Messages/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMessage(Guid id, Message message)
+        public async Task<IActionResult> PutMessage([FromRoute] Guid id, [FromBody] Message message)
         {
             if (id != message.Id)
             {
@@ -93,8 +109,8 @@ namespace Chatt.Controllers
             {
                 return NotFound();
             }
-
-            _context.Messages.Remove(message);
+            message.Text = null;
+            message.IsDeleted = true;
             await _context.SaveChangesAsync();
 
             return message;

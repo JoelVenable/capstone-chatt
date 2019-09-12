@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Chatt.Models;
 using Chatt.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace Chatt.Controllers
 {
@@ -16,11 +18,25 @@ namespace Chatt.Controllers
     [Authorize]
     public class GroupUsersController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
 
-        public GroupUsersController(ApplicationDbContext context)
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        private async Task<ApplicationUser> GetActiveUser()
+        {
+            ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
+            if (principal != null)
+            {
+                return await _userManager.GetUserAsync(principal);
+            }
+            else return null;
+        }
+
+
+        public GroupUsersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/GroupUsers

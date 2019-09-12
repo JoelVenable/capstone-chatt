@@ -1,4 +1,5 @@
-﻿using Chatt.Models;
+﻿using Chatt.Data;
+using Chatt.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Chatt.Controllers
@@ -19,19 +21,37 @@ namespace Chatt.Controllers
     {
 
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
+
+        private async Task<ApplicationUser> GetActiveUser()
+        {
+            ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
+            if (principal != null)
+            {
+                return await _userManager.GetUserAsync(principal);
+            }
+            else return null;
+        }
 
         public UploadController(
-            UserManager<ApplicationUser> userManager
+            UserManager<ApplicationUser> userManager,
+            ApplicationDbContext context
             )
         {
             _userManager = userManager;
+            _context = context;
         }
 
         [HttpPost, RequestSizeLimit(512000)]
         public async Task<IActionResult> Upload()
         {
+ 
+ 
             try
             {
+                var user = await GetActiveUser();
+                if (user == null) throw new Exception();
+
                 var bigImg = Request.Form.Files[0];
                 var avatar = Request.Form.Files[1];
 
@@ -40,6 +60,12 @@ namespace Chatt.Controllers
 
                 if (imgDbPath != null && avatarPath != null)
                 {
+                    var applicationUser = await _context.Users.FindAsync(user.Id);
+                    if (applicationUser == null) throw new Exception();
+
+                    applicationUser.ThumbUrl = avatarPath;
+                    applicationUser.ImageUrl = imgDbPath;
+                    await _context.SaveChangesAsync();
                     return Ok(new { imgDbPath, avatarPath });
                 }
                 else return BadRequest();

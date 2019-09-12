@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Web.Helpers;
+using Nancy.Json;
 
 namespace Chatt.Controllers
 {
@@ -67,9 +69,10 @@ namespace Chatt.Controllers
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                var claim = new[]
+                var claims = new[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName)
+                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Handle)
                 };
                 var signinKey = new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(_configuration["Jwt:SigningKey"])
@@ -78,6 +81,7 @@ namespace Chatt.Controllers
                 int expiryInMinutes = Convert.ToInt32(_configuration["Jwt:ExpiryInMinutes"]);
 
                 var token = new JwtSecurityToken(
+                    claims: claims,
                     issuer: _configuration["Jwt:Site"],
                     audience: _configuration["Jwt:Site"],
                     expires: DateTime.UtcNow.AddMinutes(expiryInMinutes),
