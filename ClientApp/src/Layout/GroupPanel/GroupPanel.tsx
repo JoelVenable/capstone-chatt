@@ -37,45 +37,25 @@ const GroupPanel: React.FC<PropsWithChildren<Props>> = ({
   } = useAuthContext();
 
   const classes = useGroupPanelStyles();
-  const [expanded, setExpanded] = useState<boolean>(false);
-  const [variant, setVariant] = useState<"permanent" | "temporary">(
-    "temporary"
-  );
-  const [expandAction, setExpandAction] = useState<
-    EventHandler<SyntheticEvent>
-  >((e: SyntheticEvent) => setExpanded(!expanded));
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      if (width === "xs" || width === "sm") {
-        setVariant("temporary");
-        setExpandAction((e: SyntheticEvent) => setExpanded(!expanded));
-      } else {
-        setVariant("permanent");
-        setExpandAction((e: SyntheticEvent) => {});
-        setExpanded(true);
-      }
-    } else {
-      setVariant("temporary");
-      setExpanded(false);
-    }
-  }, [width, isAuthenticated]);
+  const [expanded, setExpanded] = useState<boolean>(true);
 
   return (
     <>
       <Drawer
         open={expanded}
-        variant={variant}
+        variant="persistent"
         className={classes.drawer}
         classes={{
           paper: classes.drawerPaper
         }}
+        onClose={undefined}
         ModalProps={{
-          hideBackdrop: variant === "permanent"
+          keepMounted: true,
+          hideBackdrop: undefined
         }}>
         <Hidden mdUp>
           <div className={classes.drawerHeader}>
-            <IconButton onClick={expandAction}>
+            <IconButton onClick={undefined}>
               <ChevronLeft />
             </IconButton>
           </div>

@@ -1,12 +1,14 @@
 import { makeStyles, createStyles } from "@material-ui/styles";
 import { Theme } from "@material-ui/core";
+import { myColors } from "../../theme";
 
 const DRAWER_WIDTH = 240;
 
 const useNavbarStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      flexGrow: 1
+      flexGrow: 1,
+      color: myColors.white
     },
     menuButton: {
       marginRight: theme.spacing(2)
@@ -29,4 +31,4 @@ const useNavbarStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default useNavbarStyles
+export default useNavbarStyles;

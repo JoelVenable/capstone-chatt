@@ -7,7 +7,7 @@ export const groupManager = {
     return endpoint.fetchList();
   },
 
-  getOne: async (id: string): Promise<IGroup> => {
+  getOne: async (id: string): Promise<IGroup | undefined> => {
     return endpoint.fetch(`/${id}`);
   }
 };

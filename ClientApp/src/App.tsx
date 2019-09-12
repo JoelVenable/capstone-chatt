@@ -5,10 +5,12 @@ import { ApplicationViews } from "./ApplicationViews";
 import { BrowserRouter } from "react-router-dom";
 import theme from "./theme";
 import { ThemeProvider } from "@material-ui/styles";
+import { CssBaseline } from "@material-ui/core";
 
 const App: React.FC = () => {
   return (
     <BrowserRouter>
+      <CssBaseline />
       <AuthContextProvider>
         <ThemeProvider theme={theme}>
           <ApplicationViews />

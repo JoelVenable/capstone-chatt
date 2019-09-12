@@ -1,5 +1,6 @@
 import { makeStyles, createStyles } from "@material-ui/styles";
 import { Theme } from "@material-ui/core";
+import { myColors } from "../../theme";
 
 const DRAWER_WIDTH = 240;
 
@@ -8,7 +9,6 @@ const useGroupPanelStyles = makeStyles((theme: Theme) =>
     root: {
       display: "flex"
     },
- 
     hide: {
       display: "none"
     },
@@ -17,7 +17,9 @@ const useGroupPanelStyles = makeStyles((theme: Theme) =>
       flexShrink: 0
     },
     drawerPaper: {
-      width: DRAWER_WIDTH
+      width: DRAWER_WIDTH,
+      backgroundColor: theme.palette.primary.dark,
+      color: myColors.white
     },
     drawerHeader: {
       display: "flex",
@@ -33,14 +35,15 @@ const useGroupPanelStyles = makeStyles((theme: Theme) =>
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
       }),
-      marginLeft: -DRAWER_WIDTH
+      marginLeft: 0
     },
     contentShift: {
       transition: theme.transitions.create("margin", {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen
       }),
-      marginLeft: 0
+      marginLeft: DRAWER_WIDTH,
+      width: `calc(100% - ${DRAWER_WIDTH}px)`
     }
   })
 );

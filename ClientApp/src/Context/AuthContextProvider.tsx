@@ -89,6 +89,7 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
       signOut: async () => {
         let endpoint = new Endpoint("");
         endpoint.logout();
+        setStatus({ type: "SIGN_OUT" });
         return { response: "SUCCESS" } as IActionResult;
       },
       changePassword: async (old, newp) => {

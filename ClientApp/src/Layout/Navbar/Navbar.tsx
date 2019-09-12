@@ -1,22 +1,26 @@
 ﻿import * as React from "react";
 import { AppBar, Toolbar, Typography, Button } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 import { routeDefinitions } from "../../Router/routeDefinitions";
 import clsx from "clsx";
 import useNavbarStyles from "./useNavBarStyle";
 import { AuthContext } from "../../Context/AuthContext";
 
-interface Props {
+interface Props extends RouteComponentProps {
   drawerExpanded: boolean;
 }
 
-const Navbar: React.FC<Props> = ({ drawerExpanded }: Props) => {
+const Navbar: React.FC<Props> = ({ drawerExpanded, history }: Props) => {
   const classes = useNavbarStyles({});
   const {
     actions: { signOut },
     status: { isAuthenticated }
   } = React.useContext(AuthContext);
 
+  const handleLogout = () => {
+    signOut();
+    history.push(routeDefinitions.LOGIN);
+  };
   return (
     <div
       className={clsx(classes.appBar, {
@@ -45,4 +49,4 @@ const Navbar: React.FC<Props> = ({ drawerExpanded }: Props) => {
   );
 };
 
-export default Navbar;
+export default withRouter(Navbar);
