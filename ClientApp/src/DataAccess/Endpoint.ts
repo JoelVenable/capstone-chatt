@@ -14,7 +14,6 @@ with the following methods:
 
 import decode from "jwt-decode";
 import moment from "moment";
-import { IGroup } from "../Types/Models/IGroup";
 
 const baseURL = `/api`;
 
@@ -37,7 +36,7 @@ export class Endpoint<T, R> {
     this.endpointURL = `${baseURL}/${extension}`;
   }
 
-  private setToken = (response: IToken): void => {
+  private setToken = (response: ITokenEncoded): void => {
     localStorage.setItem(sessionVars.TOKEN, response.token);
     localStorage.setItem(sessionVars.EXPIRATION, response.expiration);
   };
@@ -75,7 +74,7 @@ export class Endpoint<T, R> {
 
   private isTokenExpired = (token: string): boolean => {
     try {
-      const decoded = decode<IToken>(token);
+      const decoded = decode<ITokenEncoded>(token);
       const expDate = moment(decoded.expiration);
 
       if (expDate.isBefore(Date.now())) return true;
@@ -92,12 +91,12 @@ export class Endpoint<T, R> {
 
   buildHeaders = (): HeadersInit => {
     let requestHeaders: HeadersInit = new Headers();
-    requestHeaders.set("Content-Type", "application/json");
-    requestHeaders.set("Accept", "application/json");
+    requestHeaders.append("Content-Type", "application/json");
+    requestHeaders.append("Accept", "application/json");
 
     if (this.loggedIn()) {
-      requestHeaders.set("credentials", "include");
-      requestHeaders.set("Authorization", `Bearer ${this.getToken()}`);
+      requestHeaders.append("credentials", "include");
+      requestHeaders.append("Authorization", `Bearer ${this.getToken()}`);
     }
     return requestHeaders;
   };
@@ -114,6 +113,22 @@ export class Endpoint<T, R> {
     return fetch(request)
       .then(r => r.json())
       .then(r => r as T);
+  };
+
+  fetchList = async (
+    urlArgs?: string,
+    options?: ResponseInit
+  ): Promise<T[]> => {
+    const url = urlArgs ? this.endpointURL + urlArgs : this.endpointURL;
+
+    const request = new Request(url, {
+      method: "GET",
+      headers: this.buildHeaders(),
+      ...options
+    });
+    return fetch(request)
+      .then(r => r.json())
+      .then(r => r.map((i: unknown) => i as T));
   };
 
   post = async (obj: T, urlArgs: string = ""): Promise<IActionResult> => {
@@ -185,9 +200,9 @@ export class Endpoint<T, R> {
     }
   };
 
-  getProfile = () => {
+  getProfile = (): Token => {
     const token = this.getToken();
-    if (token) return decode(token);
+    if (token) return decode(token) as ITokenPayload;
   };
 }
 

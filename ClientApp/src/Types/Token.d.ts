@@ -1,0 +1,1 @@
+type Token = ITokenPayload | undefined;
