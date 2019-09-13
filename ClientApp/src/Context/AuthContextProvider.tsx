@@ -20,12 +20,14 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
       case "RESOLVE_LOGGED_IN":
         return {
           ...state,
+          authResolving: false,
           isAuthenticated: true,
           userEmail: actions.email
         };
       case "RESOLVE_NOT_LOGGED_IN":
         return {
           ...state,
+          authResolving: false,
           isAuthenticated: false,
           userEmail: undefined
         };

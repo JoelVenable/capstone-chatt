@@ -10,7 +10,6 @@ export const ApplicationViews: React.FC = () => {
   return (
     <>
       <GroupPanel>
-
         <Switch>
           <AuthenticatedRoute
             path={routeDefinitions.HOMEPAGE}

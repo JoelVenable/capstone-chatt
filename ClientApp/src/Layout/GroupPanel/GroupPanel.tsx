@@ -37,38 +37,47 @@ const GroupPanel: React.FC<PropsWithChildren<Props>> = ({
   } = useAuthContext();
 
   const classes = useGroupPanelStyles();
-  const [expanded, setExpanded] = useState<boolean>(true);
+  const [expanded, setExpanded] = useState<boolean>(false);
+  const [variant, setVariant] = useState<"persistent" | "temporary">(
+    "temporary"
+  );
+
+  const hideDrawer = () => setExpanded(false);
+  const showDrawer = () => setExpanded(true);
+
+  useEffect(() => {
+    const wide = width === "md" || width === "lg" || width === "xl";
+    if (wide) setVariant("persistent");
+    if (!wide) hideDrawer();
+    if (isAuthenticated && wide) showDrawer();
+  }, [width, isAuthenticated]);
 
   return (
     <>
       <Drawer
         open={expanded}
-        variant="persistent"
+        variant={variant}
         className={classes.drawer}
         classes={{
           paper: classes.drawerPaper
         }}
-        onClose={undefined}
+        onClose={hideDrawer}
         ModalProps={{
           keepMounted: true,
-          hideBackdrop: undefined
+          hideBackdrop: false
         }}>
-        <Hidden mdUp>
-          <div className={classes.drawerHeader}>
-            <IconButton onClick={undefined}>
+        <div className={classes.drawerHeader}>
+          <Typography variant="h6">Groups</Typography>
+          <Hidden mdUp>
+            <IconButton onClick={hideDrawer}>
               <ChevronLeft />
             </IconButton>
-          </div>
-        </Hidden>
-        <List>
-          <ListItem>
-            <ListItemText primary="Groups" />
-          </ListItem>
-        </List>
+          </Hidden>
+        </div>
         <Divider />
         <GroupListComponent />
       </Drawer>
-      <Navbar drawerExpanded={expanded} />
+      <Navbar drawerExpanded={expanded} showDrawer={showDrawer} />
       <Container
         className={clsx(classes.content, {
           [classes.contentShift]: expanded

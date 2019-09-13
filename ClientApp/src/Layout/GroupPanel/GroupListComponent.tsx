@@ -3,21 +3,24 @@ import { useAuthContext } from "../../Context/useAuthContext";
 import { groupManager } from "../../DataAccess/groupManager";
 import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { Group } from "@material-ui/icons";
+
 const GroupListComponent: React.FC = () => {
   const {
-    status: { isAuthenticated }
+    status: { isAuthenticated, authResolving }
   } = useAuthContext();
 
   const [groups, setGroups] = useState<IGroup[]>([]);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    console.log("hello from useEffect side panel");
+    if (isAuthenticated && !authResolving) {
       (async () => {
         const data = await groupManager.getAll();
+        console.log(data);
         setGroups(data);
       })();
     } else setGroups([]);
-  }, [isAuthenticated]);
+  }, [isAuthenticated, authResolving]);
 
   return (
     <>

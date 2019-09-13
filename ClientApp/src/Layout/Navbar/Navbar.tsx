@@ -8,9 +8,14 @@ import { AuthContext } from "../../Context/AuthContext";
 
 interface Props extends RouteComponentProps {
   drawerExpanded: boolean;
+  showDrawer: Function;
 }
 
-const Navbar: React.FC<Props> = ({ drawerExpanded, history }: Props) => {
+const Navbar: React.FC<Props> = ({
+  drawerExpanded,
+  history,
+  showDrawer
+}: Props) => {
   const classes = useNavbarStyles({});
   const {
     actions: { signOut },

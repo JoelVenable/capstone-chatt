@@ -26,7 +26,7 @@ const useGroupPanelStyles = makeStyles((theme: Theme) =>
       alignItems: "center",
       padding: theme.spacing(0, 1),
       ...theme.mixins.toolbar,
-      justifyContent: "flex-end"
+      justifyContent: "space-between"
     },
     content: {
       flexGrow: 1,

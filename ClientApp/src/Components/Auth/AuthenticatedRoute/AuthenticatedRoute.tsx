@@ -1,7 +1,7 @@
 ﻿import * as React from "react";
 import { Route, Redirect, RouteProps } from "react-router-dom";
 import { AuthContext } from "../../../Context/AuthContext";
-
+import { routeDefinitions } from "../../../Router/routeDefinitions";
 const AuthenticatedRoute: React.FC<RouteProps> = ({
   path,
   exact,
@@ -13,6 +13,9 @@ const AuthenticatedRoute: React.FC<RouteProps> = ({
 
   if (authResolving) return <> </>;
 
+  if (!isAuthenticated) return <Redirect to={routeDefinitions.LOGIN} />;
+
+  console.log("Am I getting here??");
   return <Route path={path} exact={exact} component={component} />;
 };
 
