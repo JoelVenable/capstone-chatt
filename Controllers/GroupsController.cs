@@ -10,6 +10,7 @@ using Chatt.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using Chatt.Models.ViewModels;
 
 namespace Chatt.Controllers
 {
@@ -36,7 +37,7 @@ namespace Chatt.Controllers
             return await _context.Groups.ToListAsync();
         }
 
-       
+
 
 
 
@@ -135,12 +136,19 @@ namespace Chatt.Controllers
 
         // POST: api/Groups
         [HttpPost]
-        public async Task<ActionResult<Group>> PostGroup(Group @group)
+        public async Task<ActionResult<Group>> PostGroup(PostGroup data)
         {
-            _context.Groups.Add(@group);
+            var group = new Group()
+            {
+                Name = data.Name,
+                IsPrivate = data.IsPrivate,
+                IsProtected = data.IsProtected,
+                DateCreated = DateTime.UtcNow
+            };
+            _context.Groups.Add(group);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetGroup", new { id = @group.Id }, @group);
+            return CreatedAtAction("GetGroup", new { id = group.Id }, group);
         }
 
         // DELETE: api/Groups/5
