@@ -12,6 +12,9 @@ const GroupListComponent: React.FC = () => {
   const [groups, setGroups] = useState<IGroup[]>([]);
 
   useEffect(() => {
+    console.log("Auth: ", isAuthenticated);
+
+    console.log("Resolving: ", authResolving);
     if (isAuthenticated && !authResolving) {
       (async () => {
         const data = await groupManager.getAll();

@@ -25,6 +25,7 @@ import { useAuthContext } from "../../Context/useAuthContext";
 import clsx from "clsx";
 import Navbar from "../Navbar/Navbar";
 import GroupListComponent from "./GroupListComponent";
+import AddGroup from "./AddGroup/AddGroup";
 
 interface Props extends WithWidth {}
 
@@ -76,6 +77,8 @@ const GroupPanel: React.FC<PropsWithChildren<Props>> = ({
         </div>
         <Divider />
         <GroupListComponent />
+        <Divider />
+        <AddGroup />
       </Drawer>
       <Navbar drawerExpanded={expanded} showDrawer={showDrawer} />
       <Container
