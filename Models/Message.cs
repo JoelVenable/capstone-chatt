@@ -8,10 +8,10 @@ namespace Chatt.Models
     public class Message : BaseItem
     {
         public string SenderId { get; set; }
-        public ApplicationUser Sender { get; set; }
+        public virtual ApplicationUser Sender { get; set; }
         public Guid GroupId { get; set; }
 
-        public Group Group { get; set; }
+        public virtual Group Group { get; set; }
 
         public string Text { get; set; }
 

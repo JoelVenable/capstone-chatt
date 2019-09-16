@@ -59,7 +59,9 @@ const AddGroupUser: React.FC<Props> = ({ update, setUpdate }: Props) => {
           value={value}
           onChange={handleChange}>
           {groups.map(g => (
-            <MenuItem value={g.id}>{g.name}</MenuItem>
+            <MenuItem value={g.id} key={g.id}>
+              {g.name}
+            </MenuItem>
           ))}
         </Select>
         <IconButton

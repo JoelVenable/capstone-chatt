@@ -18,7 +18,7 @@ interface Props {
 }
 
 const AddGroup: React.FC<Props> = ({ setUpdate }: Props) => {
-  const [isModalOpen, setModalOpen] = useState<boolean>(true);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [newGroupName, setNewGroupName] = useState<string>("");
   const [groupPrivate, setGroupPrivate] = useState<boolean>(false);
   const [groupProtected, setGroupProtected] = useState<boolean>(false);
@@ -42,6 +42,7 @@ const AddGroup: React.FC<Props> = ({ setUpdate }: Props) => {
 
   const handleSubmit: React.FormEventHandler = async e => {
     e.preventDefault();
+    setLoading(true);
     const { response } = await groupManager.post({
       name: newGroupName,
       isPrivate: groupPrivate,
@@ -54,6 +55,7 @@ const AddGroup: React.FC<Props> = ({ setUpdate }: Props) => {
       setNewGroupName("");
     }
     setUpdate(Math.random());
+    setLoading(false);
   };
 
   return (

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using Chatt.Models.ViewModels;
 
 namespace Chatt.Controllers
 {
@@ -19,19 +20,10 @@ namespace Chatt.Controllers
     public class MessagesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMyUserManager _userManager;
 
-        private async Task<ApplicationUser> GetActiveUser()
-        {
-            ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
-            if (principal != null)
-            {
-                return await _userManager.GetUserAsync(principal);
-            }
-            else return null;
-        }
 
-        public MessagesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public MessagesController(ApplicationDbContext context, IMyUserManager userManager)
         {
             _userManager = userManager;
             _context = context;
@@ -39,25 +31,20 @@ namespace Chatt.Controllers
 
         
 
-        // GET: api/Messages
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Message>>> GetMessages()
-        {
-            return await _context.Messages.ToListAsync();
-        }
-
         // GET: api/Messages/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Message>> GetMessage(Guid id)
+        public async Task<ActionResult<IEnumerable<Message>>> GetMessages(Guid id)
         {
-            var message = await _context.Messages.FindAsync(id);
+            //  id is actually a GROUP id.
 
-            if (message == null)
+            var messages = await _context.Messages.Where(m => m.GroupId == id).ToListAsync();
+
+            if (messages == null)
             {
                 return NotFound();
             }
 
-            return message;
+            return messages;
         }
 
         // PUT: api/Messages/5
@@ -92,12 +79,22 @@ namespace Chatt.Controllers
 
         // POST: api/Messages
         [HttpPost]
-        public async Task<ActionResult<Message>> PostMessage(Message message)
+        public async Task<ActionResult<Message>> PostMessage(NewMessage messageModel)
         {
+            var user = await _userManager.GetCurrentUserAsync(HttpContext);
+            var message = new Message()
+            {
+                SenderId = user.Id,
+                GroupId = messageModel.GroupId,
+                Text = messageModel.Text,
+                IsDeleted = false
+            };
+
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();
+            message.Sender = null;
 
-            return CreatedAtAction("GetMessage", new { id = message.Id }, message);
+            return Created("", message);
         }
 
         // DELETE: api/Messages/5
