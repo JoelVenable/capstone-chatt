@@ -37,7 +37,7 @@ namespace Chatt.Controllers
         {
             //  id is actually a GROUP id.
 
-            var messages = await _context.Messages.Where(m => m.GroupId == id).ToListAsync();
+            var messages = await _context.Messages.Where(m => m.GroupId == id && m.ParentMessageId == null).Include(m => m.Thread).ToListAsync();
 
             if (messages == null)
             {

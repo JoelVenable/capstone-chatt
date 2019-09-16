@@ -24,5 +24,7 @@ namespace Chatt.Models
         public virtual ICollection<Reaction> Reactions { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public bool IsModified { get; set; }
     }
 }
