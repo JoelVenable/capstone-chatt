@@ -15,10 +15,13 @@ const AddMessage: React.FC<Props> = ({ groupId }: Props) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await messageManager.post({
-      groupId,
-      text: messageText
-    });
+    if (messageText.length > 0) {
+      await messageManager.post({
+        groupId,
+        text: messageText
+      });
+      setMessageText("");
+    }
   };
 
   return (

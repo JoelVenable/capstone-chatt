@@ -10,6 +10,7 @@ import MessageItem from "../../Components/MessageItem/MessageItem";
 
 const MessageContainer = styled.div`
   height: calc(100vh - 64px - 56px - 48px);
+  overflow-y: scroll;
 `;
 
 interface Props {
