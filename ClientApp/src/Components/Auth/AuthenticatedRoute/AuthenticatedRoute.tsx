@@ -5,7 +5,8 @@ import { routeDefinitions } from "../../../Router/routeDefinitions";
 const AuthenticatedRoute: React.FC<RouteProps> = ({
   path,
   exact,
-  component
+  component,
+  render
 }: RouteProps) => {
   const {
     status: { isAuthenticated, authResolving }
@@ -15,8 +16,9 @@ const AuthenticatedRoute: React.FC<RouteProps> = ({
 
   if (!isAuthenticated) return <Redirect to={routeDefinitions.LOGIN} />;
 
-  console.log("Am I getting here??");
-  return <Route path={path} exact={exact} component={component} />;
+  return (
+    <Route path={path} exact={exact} component={component} render={render} />
+  );
 };
 
 export default AuthenticatedRoute;
