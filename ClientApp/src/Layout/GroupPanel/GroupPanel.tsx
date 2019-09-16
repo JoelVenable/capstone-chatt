@@ -1,24 +1,14 @@
-import React, {
-  useState,
-  useEffect,
-  PropsWithChildren,
-  SyntheticEvent,
-  EventHandler
-} from "react";
+import React, { useState, useEffect, PropsWithChildren } from "react";
 import {
   Drawer,
   Typography,
   withWidth,
   IconButton,
   Hidden,
-  List,
-  ListItem,
-  ListItemText,
   Divider,
   Container
 } from "@material-ui/core";
 import { WithWidth } from "@material-ui/core/withWidth";
-import { groupManager } from "../../DataAccess/groupManager";
 import { ChevronLeft } from "@material-ui/icons";
 import useGroupPanelStyles from "./useGroupPanelStyles";
 import { useAuthContext } from "../../Context/useAuthContext";
@@ -26,6 +16,7 @@ import clsx from "clsx";
 import Navbar from "../Navbar/Navbar";
 import GroupListComponent from "./GroupListComponent";
 import AddGroupUser from "./AddGroupUser/AddGroupUser";
+import AddGroup from "./AddGroup/AddGroup";
 
 interface Props extends WithWidth {}
 
@@ -80,6 +71,8 @@ const GroupPanel: React.FC<PropsWithChildren<Props>> = ({
         <GroupListComponent update={update} setUpdate={setUpdate} />
         <Divider />
         <AddGroupUser update={update} setUpdate={setUpdate} />
+        <Divider />
+        <AddGroup update={update} setUpdate={setUpdate} />
       </Drawer>
       <Navbar drawerExpanded={expanded} showDrawer={showDrawer} />
       <Container

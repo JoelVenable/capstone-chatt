@@ -9,7 +9,9 @@ export const groupManager = {
   getOthers: async (): Promise<IGroup[]> => {
     return endpoint.fetchList("/othergroups");
   },
-
+  post: async (newGroup: IGroup): Promise<IActionResult> => {
+    return endpoint.post(newGroup);
+  },
   getOne: async (id: string): Promise<IGroup | undefined> => {
     return endpoint.fetch(`/${id}`);
   }
