@@ -3,7 +3,7 @@ import { useAuthContext } from "../../Context/AuthContext/useAuthContext";
 import clsx from "clsx";
 import useGroupPanelStyles from "./useGroupPanelStyles";
 import Navbar from "../Navbar/Navbar";
-import { WithWidth } from "@material-ui/core/withWidth";
+import withWidth, { WithWidth } from "@material-ui/core/withWidth";
 import { Container } from "@material-ui/core";
 import GroupPanel from "../GroupPanel/GroupPanel";
 
@@ -50,4 +50,4 @@ const MainLayout: React.FC<PropsWithChildren<WithWidth>> = ({
   );
 };
 
-export default MainLayout;
+export default withWidth()(MainLayout);

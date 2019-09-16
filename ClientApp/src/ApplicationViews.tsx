@@ -4,13 +4,13 @@ import AuthenticatedRoute from "./Components/Auth/AuthenticatedRoute/Authenticat
 import Homepage from "./Views/Homepage/Homepage";
 import { routeDefinitions } from "./Router/routeDefinitions";
 import LoginView from "./Views/Login/Login";
-import GroupPanel from "./Layout/GroupPanel/GroupPanel";
 import GroupDetail from "./Views/GroupDetail/GroupDetail";
+import MainLayout from "./Layout/MainLayout/MainLayout";
 
 export const ApplicationViews: React.FC = () => {
   return (
     <>
-      <GroupPanel>
+      <MainLayout>
         <Switch>
           <AuthenticatedRoute
             path={routeDefinitions.HOMEPAGE}
@@ -25,7 +25,7 @@ export const ApplicationViews: React.FC = () => {
           />
           <Route path={routeDefinitions.LOGIN} component={LoginView} />
         </Switch>
-      </GroupPanel>
+      </MainLayout>
     </>
   );
 };

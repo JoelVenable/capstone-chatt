@@ -1,6 +1,6 @@
 import { hot } from "react-hot-loader/root";
 import * as React from "react";
-import { AuthContextProvider } from "./Context/AuthContextProvider";
+import { AuthContextProvider } from "./Context/AuthContext/AuthContextProvider";
 import { ApplicationViews } from "./ApplicationViews";
 import { BrowserRouter } from "react-router-dom";
 import theme from "./theme";
