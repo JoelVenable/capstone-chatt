@@ -3,11 +3,17 @@ import { RouteComponentProps } from "react-router-dom";
 
 import { Grid, withWidth } from "@material-ui/core";
 import { WithWidth } from "@material-ui/core/withWidth";
+import AddMessage from "../../Components/AddMessage/AddMessage";
 
-interface Props extends RouteComponentProps, WithWidth {}
+interface Props {
+  groupId: string
+}
 
-const Homepage: React.FC<Props> = ({ width }: Props) => {
-  return <h1>Hello from homepage</h1>;
+const Homepage: React.FC<Props> = ({ groupId }: Props) => {
+
+
+
+  return <AddMessage />;
 };
 
 export default withWidth()(Homepage);

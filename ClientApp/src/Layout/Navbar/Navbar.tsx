@@ -56,7 +56,7 @@ const Navbar: React.FC<Props> = ({
             Chatt
           </Typography>
           {isAuthenticated ? (
-            <Button onClick={signOut} color="inherit">
+            <Button onClick={handleLogout} color="inherit">
               Logout
             </Button>
           ) : (

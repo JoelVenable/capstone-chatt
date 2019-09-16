@@ -12,11 +12,10 @@ const GroupListComponent: React.FC = () => {
   const [groups, setGroups] = useState<IGroup[]>([]);
 
   useEffect(() => {
-    console.log("hello from useEffect side panel");
     if (isAuthenticated && !authResolving) {
       (async () => {
         const data = await groupManager.getAll();
-        console.log(data);
+        console.log("hello from fetch call");
         setGroups(data);
       })();
     } else setGroups([]);
