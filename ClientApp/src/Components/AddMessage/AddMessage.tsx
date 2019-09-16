@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { TextField, Button } from "@material-ui/core";
+import { messageManager } from "../../DataAccess/messageManager";
 
 interface Props {
   groupId: string;
@@ -10,6 +11,10 @@ const AddMessage: React.FC<Props> = ({ groupId }: Props) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessageText(e.target.value);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    await messageManager.post({});
   };
 
   return (

@@ -21,14 +21,16 @@ const Homepage: React.FC<Props> = ({ groupId }: Props) => {
 
   const fetchMessages = async () => {
     if (groupId !== "") {
-      const newMessages = await messageManager.getAll();
+      const newMessages = await messageManager.getAll(groupId);
 
       setMessages(newMessages);
     }
   };
 
   useEffect(() => {
-    (async () => {})();
+    (async () => {
+      fetchMessages();
+    })();
   }, [groupId]);
 
   return (

@@ -3,11 +3,11 @@ import { Endpoint } from "./Endpoint";
 const endpoint = new Endpoint<IMessage, {}>("messages");
 
 export const messageManager = {
-  getAll: async (): Promise<IMessage[]> => {
-    return endpoint.fetchList("");
+  getAll: async (id: string): Promise<IMessage[]> => {
+    return endpoint.fetchList(`/${id}`);
   },
-  post: async (newGroup: IMessage): Promise<IActionResult> => {
-    return endpoint.post(newGroup);
+  post: async (newMessage: IMessage): Promise<IActionResult> => {
+    return endpoint.post(newMessage);
   },
   getOne: async (id: string): Promise<IMessage | undefined> => {
     return endpoint.fetch(`/${id}`);
