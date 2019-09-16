@@ -138,6 +138,7 @@ namespace Chatt.Controllers
         [HttpPost]
         public async Task<ActionResult<Group>> PostGroup(PostGroup data)
         {
+            var user = await _userManager.GetCurrentUserAsync(HttpContext);
             var group = new Group()
             {
                 Name = data.Name,
@@ -145,7 +146,14 @@ namespace Chatt.Controllers
                 IsProtected = data.IsProtected,
                 DateCreated = DateTime.UtcNow
             };
+
+            var groupUser = new GroupUser()
+            {
+                GroupId = group.Id,
+                UserId = user.Id
+            };
             _context.Groups.Add(group);
+            _context.GroupUsers.Add(groupUser);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetGroup", new { id = group.Id }, group);
