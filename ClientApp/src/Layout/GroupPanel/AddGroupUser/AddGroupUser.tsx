@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { groupManager } from "../../../DataAccess/groupManager";
 import { Select, MenuItem, IconButton, Typography } from "@material-ui/core";
-import { useAuthContext } from "../../../Context/useAuthContext";
+import { useAuthContext } from "../../../Context/AuthContext/useAuthContext";
 import { myColors } from "../../../theme";
 import { Add } from "@material-ui/icons";
 import { groupUserManager } from "../../../DataAccess/groupUserManager";

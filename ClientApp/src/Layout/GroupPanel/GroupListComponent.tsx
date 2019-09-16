@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useAuthContext } from "../../Context/useAuthContext";
+import { useAuthContext } from "../../Context/AuthContext/useAuthContext";
 import { groupManager } from "../../DataAccess/groupManager";
 import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { Group } from "@material-ui/icons";

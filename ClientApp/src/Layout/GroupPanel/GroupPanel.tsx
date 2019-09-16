@@ -1,60 +1,45 @@
-import React, { useState, useEffect, PropsWithChildren } from "react";
+import React, { useState } from "react";
 import {
   Drawer,
   Typography,
   withWidth,
   IconButton,
   Hidden,
-  Divider,
-  Container
+  Divider
 } from "@material-ui/core";
-import { WithWidth } from "@material-ui/core/withWidth";
 import { ChevronLeft } from "@material-ui/icons";
-import useGroupPanelStyles from "./useGroupPanelStyles";
-import { useAuthContext } from "../../Context/useAuthContext";
-import clsx from "clsx";
-import Navbar from "../Navbar/Navbar";
+import useGroupPanelStyles from "../MainLayout/useGroupPanelStyles";
+
 import GroupListComponent from "./GroupListComponent";
 import AddGroupUser from "./AddGroupUser/AddGroupUser";
 import AddGroup from "./AddGroup/AddGroup";
 
-interface Props extends WithWidth {}
+interface Props {
+  drawerExpanded: boolean;
+  variant: "persistent" | "temporary";
+  hideDrawer: Function;
+}
 
-const GroupPanel: React.FC<PropsWithChildren<Props>> = ({
-  width,
-  children
-}: PropsWithChildren<Props>) => {
-  const {
-    status: { isAuthenticated }
-  } = useAuthContext();
-
-  const classes = useGroupPanelStyles();
-  const [expanded, setExpanded] = useState<boolean>(false);
-  const [variant, setVariant] = useState<"persistent" | "temporary">(
-    "temporary"
-  );
+const GroupPanel: React.FC<Props> = ({
+  drawerExpanded,
+  variant,
+  hideDrawer
+}: Props) => {
   const [update, setUpdate] = useState<number>(Math.random());
+  const classes = useGroupPanelStyles();
 
-  const hideDrawer = () => setExpanded(false);
-  const showDrawer = () => setExpanded(true);
-
-  useEffect(() => {
-    const wide = width === "md" || width === "lg" || width === "xl";
-    if (wide) setVariant("persistent");
-    if (!wide) hideDrawer();
-    if (isAuthenticated && wide) showDrawer();
-  }, [width, isAuthenticated]);
+  const handleClose = () => hideDrawer();
 
   return (
     <>
       <Drawer
-        open={expanded}
+        open={drawerExpanded}
         variant={variant}
         className={classes.drawer}
         classes={{
           paper: classes.drawerPaper
         }}
-        onClose={hideDrawer}
+        onClose={handleClose}
         ModalProps={{
           keepMounted: true,
           hideBackdrop: false
@@ -62,7 +47,7 @@ const GroupPanel: React.FC<PropsWithChildren<Props>> = ({
         <div className={classes.drawerHeader}>
           <Typography variant="h6">Groups</Typography>
           <Hidden mdUp>
-            <IconButton onClick={hideDrawer}>
+            <IconButton onClick={handleClose}>
               <ChevronLeft />
             </IconButton>
           </Hidden>
@@ -72,15 +57,8 @@ const GroupPanel: React.FC<PropsWithChildren<Props>> = ({
         <Divider />
         <AddGroupUser update={update} setUpdate={setUpdate} />
         <Divider />
-        <AddGroup update={update} setUpdate={setUpdate} />
+        <AddGroup setUpdate={setUpdate} />
       </Drawer>
-      <Navbar drawerExpanded={expanded} showDrawer={showDrawer} />
-      <Container
-        className={clsx(classes.content, {
-          [classes.contentShift]: expanded
-        })}>
-        {children}
-      </Container>
     </>
   );
 };

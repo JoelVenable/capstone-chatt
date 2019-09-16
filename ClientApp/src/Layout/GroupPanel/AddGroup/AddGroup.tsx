@@ -14,11 +14,10 @@ import { myColors } from "../../../theme";
 import { groupManager } from "../../../DataAccess/groupManager";
 
 interface Props {
-  update: number;
   setUpdate: Function;
 }
 
-const AddGroup: React.FC<Props> = ({ update, setUpdate }: Props) => {
+const AddGroup: React.FC<Props> = ({ setUpdate }: Props) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(true);
   const [newGroupName, setNewGroupName] = useState<string>("");
   const [groupPrivate, setGroupPrivate] = useState<boolean>(false);
@@ -48,8 +47,13 @@ const AddGroup: React.FC<Props> = ({ update, setUpdate }: Props) => {
       isPrivate: groupPrivate,
       isProtected: groupProtected
     });
+    if (response === "SUCCESS") {
+      closeModal();
+      setGroupPrivate(false);
+      setGroupProtected(false);
+      setNewGroupName("");
+    }
     setUpdate(Math.random());
-    console.log(response);
   };
 
   return (

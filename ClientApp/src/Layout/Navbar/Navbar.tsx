@@ -11,8 +11,8 @@ import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 import { routeDefinitions } from "../../Router/routeDefinitions";
 import clsx from "clsx";
 import useNavbarStyles from "./useNavBarStyle";
-import { AuthContext } from "../../Context/AuthContext";
 import { Menu } from "@material-ui/icons";
+import { useAuthContext } from "../../Context/AuthContext/useAuthContext";
 interface Props extends RouteComponentProps {
   drawerExpanded: boolean;
   showDrawer: Function;
@@ -27,7 +27,7 @@ const Navbar: React.FC<Props> = ({
   const {
     actions: { signOut },
     status: { isAuthenticated, authResolving }
-  } = React.useContext(AuthContext);
+  } = useAuthContext();
 
   const handleLogout = () => {
     signOut();
