@@ -14,6 +14,7 @@ const AddMessage: React.FC<Props> = ({ groupId }: Props) => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     await messageManager.post({
       groupId,
       text: messageText
@@ -41,6 +42,7 @@ const AddMessage: React.FC<Props> = ({ groupId }: Props) => {
         <Button
           variant="contained"
           color="primary"
+          onClick={handleSubmit}
           style={{ minWidth: "18%", marginLeft: ".6rem" }}>
           Send it!
         </Button>
