@@ -13,9 +13,10 @@ import clsx from "clsx";
 import useNavbarStyles from "./useNavBarStyle";
 import { Menu } from "@material-ui/icons";
 import { useAuthContext } from "../../Context/AuthContext/useAuthContext";
+
 interface Props extends RouteComponentProps {
   drawerExpanded: boolean;
-  showDrawer: Function;
+  showDrawer?: Function;
 }
 
 const Navbar: React.FC<Props> = ({
@@ -33,6 +34,14 @@ const Navbar: React.FC<Props> = ({
     signOut();
     history.push(routeDefinitions.LOGIN);
   };
+
+  const handleShowControlClick = (e: React.SyntheticEvent) => {
+    if (showDrawer) showDrawer();
+  };
+
+  const showControl =
+    isAuthenticated && !authResolving && !drawerExpanded && showDrawer;
+
   return (
     <div
       className={clsx(classes.appBar, {
@@ -41,12 +50,12 @@ const Navbar: React.FC<Props> = ({
       <AppBar position="static" color="primary">
         <Toolbar>
           <Hidden mdUp>
-            {isAuthenticated && !authResolving && !drawerExpanded ? (
+            {showControl ? (
               <IconButton
                 edge="start"
                 className={classes.menuButton}
                 color="inherit"
-                onClick={() => showDrawer()}
+                onClick={handleShowControlClick}
                 aria-label="menu">
                 <Menu />
               </IconButton>

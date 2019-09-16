@@ -18,12 +18,14 @@ interface Props {
   drawerExpanded: boolean;
   variant: "persistent" | "temporary";
   hideDrawer: Function;
+  setActiveGroup: Function;
 }
 
 const GroupPanel: React.FC<Props> = ({
   drawerExpanded,
   variant,
-  hideDrawer
+  hideDrawer,
+  setActiveGroup
 }: Props) => {
   const [update, setUpdate] = useState<number>(Math.random());
   const classes = useGroupPanelStyles();
@@ -53,7 +55,11 @@ const GroupPanel: React.FC<Props> = ({
           </Hidden>
         </div>
         <Divider />
-        <GroupListComponent update={update} setUpdate={setUpdate} />
+        <GroupListComponent
+          update={update}
+          setUpdate={setUpdate}
+          setActiveGroup={setActiveGroup}
+        />
         <Divider />
         <AddGroupUser update={update} setUpdate={setUpdate} />
         <Divider />

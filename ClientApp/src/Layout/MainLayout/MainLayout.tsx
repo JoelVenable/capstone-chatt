@@ -6,11 +6,9 @@ import Navbar from "../Navbar/Navbar";
 import withWidth, { WithWidth } from "@material-ui/core/withWidth";
 import { Container } from "@material-ui/core";
 import GroupPanel from "../GroupPanel/GroupPanel";
+import Homepage from "../../Views/Homepage/Homepage";
 
-const MainLayout: React.FC<PropsWithChildren<WithWidth>> = ({
-  width,
-  children
-}: PropsWithChildren<WithWidth>) => {
+const MainLayout: React.FC<WithWidth> = ({ width }: WithWidth) => {
   const {
     status: { isAuthenticated }
   } = useAuthContext();
@@ -32,22 +30,25 @@ const MainLayout: React.FC<PropsWithChildren<WithWidth>> = ({
     if (isAuthenticated && wide) showDrawer();
   }, [width, isAuthenticated]);
 
-  return (
-    <>
-      <GroupPanel
-        drawerExpanded={expanded}
-        variant={variant}
-        hideDrawer={hideDrawer}
-      />
-      <Navbar drawerExpanded={expanded} showDrawer={showDrawer} />
-      <Container
-        className={clsx(classes.content, {
-          [classes.contentShift]: expanded
-        })}>
-        {children}
-      </Container>
-    </>
-  );
+  if (isAuthenticated)
+    return (
+      <>
+        <GroupPanel
+          drawerExpanded={expanded}
+          variant={variant}
+          hideDrawer={hideDrawer}
+          setActiveGroup={setActiveGroup}
+        />
+        <Navbar drawerExpanded={expanded} showDrawer={showDrawer} />
+        <Container
+          className={clsx(classes.content, {
+            [classes.contentShift]: expanded
+          })}>
+          <Homepage groupId={activeGroup} />
+        </Container>
+      </>
+    );
+  else return <></>;
 };
 
 export default withWidth()(MainLayout);
