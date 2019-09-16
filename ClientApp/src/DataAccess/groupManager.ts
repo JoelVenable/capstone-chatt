@@ -4,7 +4,7 @@ const endpoint = new Endpoint<IGroup, {}>("groups");
 
 export const groupManager = {
   getAll: async (): Promise<IGroup[]> => {
-    return endpoint.fetchList();
+    return endpoint.fetchList("/myGroups");
   },
 
   getOne: async (id: string): Promise<IGroup | undefined> => {

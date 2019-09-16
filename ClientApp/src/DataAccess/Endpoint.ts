@@ -76,7 +76,6 @@ export class Endpoint<T, R> {
     try {
       const decoded = decode<ITokenEncoded>(token);
 
-      console.log(decoded);
       const expDate = moment(decoded.expiration);
 
       if (expDate.isBefore(Date.now())) return true;
