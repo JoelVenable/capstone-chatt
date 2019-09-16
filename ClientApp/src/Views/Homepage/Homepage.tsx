@@ -5,6 +5,12 @@ import { Grid, withWidth } from "@material-ui/core";
 import { WithWidth } from "@material-ui/core/withWidth";
 import AddMessage from "../../Components/AddMessage/AddMessage";
 import { messageManager } from "../../DataAccess/messageManager";
+import styled from "@emotion/styled";
+import MessageItem from "../../Components/MessageItem/MessageItem";
+
+const MessageContainer = styled.div`
+  height: calc(100vh - 64px - 56px - 48px);
+`;
 
 interface Props {
   groupId: string;
@@ -25,7 +31,17 @@ const Homepage: React.FC<Props> = ({ groupId }: Props) => {
     (async () => {})();
   }, [groupId]);
 
-  return <AddMessage groupId={groupId} />;
+  return (
+    <>
+      <MessageContainer>
+        {messages.map(m => (
+          <MessageItem message={m} key={m.id} />
+        ))}
+      </MessageContainer>
+
+      <AddMessage groupId={groupId} />
+    </>
+  );
 };
 
 export default withWidth()(Homepage);
