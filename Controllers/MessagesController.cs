@@ -29,7 +29,7 @@ namespace Chatt.Controllers
             _context = context;
         }
 
-        
+
 
         // GET: api/Messages/5
         [HttpGet("{id}")]
@@ -47,32 +47,20 @@ namespace Chatt.Controllers
             return messages;
         }
 
-        // PUT: api/Messages/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMessage([FromRoute] Guid id, [FromBody] Message message)
+        // PUT: api/Messages
+        [HttpPut]
+        public async Task<IActionResult> PutMessage([FromBody] EditMessage editedMessage)
         {
-            if (id != message.Id)
-            {
-                return BadRequest();
-            }
+            var user = await _userManager.GetCurrentUserAsync(HttpContext);
 
-            _context.Entry(message).State = EntityState.Modified;
+            var message = await _context.Messages.FirstAsync(m => m.Id == editedMessage.Id);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MessageExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            if (message == null || message.SenderId != user.Id) return BadRequest();
+
+            message.Text = editedMessage.Text;
+            message.IsModified = true;
+
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
