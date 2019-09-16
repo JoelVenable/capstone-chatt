@@ -9,7 +9,7 @@ namespace Chatt.Models
     public abstract class BaseItem
     {
         [Key]
-        public virtual Guid Id { get; set; }
+        public virtual Guid Id { get; set; } = Guid.NewGuid();
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
     }
 }
