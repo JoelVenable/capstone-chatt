@@ -92,8 +92,9 @@ namespace Chatt.Controllers
 
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();
+            message.Sender = null;
 
-            return CreatedAtAction("GetMessage", new { id = message.Id }, message);
+            return Created("", message);
         }
 
         // DELETE: api/Messages/5
