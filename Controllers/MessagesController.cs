@@ -39,25 +39,20 @@ namespace Chatt.Controllers
 
         
 
-        // GET: api/Messages
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Message>>> GetMessages()
-        {
-            return await _context.Messages.ToListAsync();
-        }
-
         // GET: api/Messages/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Message>> GetMessage(Guid id)
+        public async Task<ActionResult<IEnumerable<Message>>> GetMessages(Guid id)
         {
-            var message = await _context.Messages.FindAsync(id);
+            //  id is actually a GROUP id.
 
-            if (message == null)
+            var messages = await _context.Messages.Where(m => m.GroupId == id).ToListAsync();
+
+            if (messages == null)
             {
                 return NotFound();
             }
 
-            return message;
+            return messages;
         }
 
         // PUT: api/Messages/5
