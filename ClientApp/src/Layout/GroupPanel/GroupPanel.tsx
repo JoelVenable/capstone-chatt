@@ -25,7 +25,7 @@ import { useAuthContext } from "../../Context/useAuthContext";
 import clsx from "clsx";
 import Navbar from "../Navbar/Navbar";
 import GroupListComponent from "./GroupListComponent";
-import AddGroup from "./AddGroup/AddGroup";
+import AddGroupUser from "./AddGroupUser/AddGroupUser";
 
 interface Props extends WithWidth {}
 
@@ -42,6 +42,7 @@ const GroupPanel: React.FC<PropsWithChildren<Props>> = ({
   const [variant, setVariant] = useState<"persistent" | "temporary">(
     "temporary"
   );
+  const [update, setUpdate] = useState<number>(Math.random());
 
   const hideDrawer = () => setExpanded(false);
   const showDrawer = () => setExpanded(true);
@@ -76,9 +77,9 @@ const GroupPanel: React.FC<PropsWithChildren<Props>> = ({
           </Hidden>
         </div>
         <Divider />
-        <GroupListComponent />
+        <GroupListComponent update={update} setUpdate={setUpdate} />
         <Divider />
-        <AddGroup />
+        <AddGroupUser update={update} setUpdate={setUpdate} />
       </Drawer>
       <Navbar drawerExpanded={expanded} showDrawer={showDrawer} />
       <Container

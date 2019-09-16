@@ -4,7 +4,12 @@ import { groupManager } from "../../DataAccess/groupManager";
 import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { Group } from "@material-ui/icons";
 
-const GroupListComponent: React.FC = () => {
+interface Props {
+  update: number;
+  setUpdate: Function;
+}
+
+const GroupListComponent: React.FC<Props> = ({ update, setUpdate }: Props) => {
   const {
     status: { isAuthenticated, authResolving }
   } = useAuthContext();
@@ -12,17 +17,12 @@ const GroupListComponent: React.FC = () => {
   const [groups, setGroups] = useState<IGroup[]>([]);
 
   useEffect(() => {
-    console.log("Auth: ", isAuthenticated);
-
-    console.log("Resolving: ", authResolving);
-    if (isAuthenticated && !authResolving) {
-      (async () => {
-        const data = await groupManager.getAll();
-        console.log("hello from fetch call");
-        setGroups(data);
-      })();
-    } else setGroups([]);
-  }, [isAuthenticated, authResolving]);
+    (async () => {
+      const data = await groupManager.getAll();
+      console.log("hello from fetch call");
+      setGroups(data);
+    })();
+  }, [isAuthenticated, authResolving, update]);
 
   return (
     <>
