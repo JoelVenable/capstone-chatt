@@ -20,19 +20,10 @@ namespace Chatt.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMyUserManager _userManager;
 
-        private async Task<ApplicationUser> GetActiveUser()
-        {
-            ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
-            if (principal != null)
-            {
-                return await _userManager.GetUserAsync(principal);
-            }
-            else return null;
-        }
 
-        public GroupsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public GroupsController(ApplicationDbContext context, IMyUserManager userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -49,10 +40,11 @@ namespace Chatt.Controllers
 
 
 
-        [HttpGet("myGroups")]
-        public async Task<ActionResult<IEnumerable<Group>>> GetMyGroups()
+        [HttpGet]
+        [Route("/api/[controller]/mygroups")]
+        public async Task<ActionResult<IEnumerable<Group>>> MyGroups()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var user = await _userManager.GetCurrentUserAsync(HttpContext);
             if (user == null) return NotFound();
 
             var groups = await _context.GroupUsers
@@ -64,6 +56,25 @@ namespace Chatt.Controllers
             return groups;
 
 
+        }
+
+
+        [HttpGet]
+        [Route("/api/[controller]/othergroups")]
+        public async Task<ActionResult<IEnumerable<Group>>> OtherGroups()
+        {
+            var user = await _userManager.GetCurrentUserAsync(HttpContext);
+            if (user == null) return NotFound();
+
+            var myGroups = await _context.GroupUsers
+                .Where(g => g.UserId == user.Id)
+                .Include(g => g.Group)
+                .Select(g => g.Group)
+                .ToListAsync();
+
+            var otherGroups = await _context.Groups.Where(g => myGroups.Contains(g) == false).ToListAsync();
+
+            return otherGroups;
         }
 
         [HttpGet("find")]
