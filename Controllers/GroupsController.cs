@@ -150,7 +150,9 @@ namespace Chatt.Controllers
             var groupUser = new GroupUser()
             {
                 GroupId = group.Id,
-                UserId = user.Id
+                UserId = user.Id,
+                DateCreated = DateTime.UtcNow,
+                DateActive = DateTime.UtcNow
             };
             _context.Groups.Add(group);
             _context.GroupUsers.Add(groupUser);
