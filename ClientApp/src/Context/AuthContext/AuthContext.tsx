@@ -4,7 +4,8 @@ export const AuthContext: React.Context<IAuthContext> = React.createContext({
   status: {
     isAuthenticated: false,
     authResolving: true,
-    userEmail: undefined
+    userEmail: undefined,
+    userId: undefined
   },
   actions: {
     signIn: async cred => {

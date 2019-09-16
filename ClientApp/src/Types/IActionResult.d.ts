@@ -2,5 +2,7 @@
 
 interface IActionResult {
   response: ActionResult;
-  email?: string
+  email?: string;
+  handle?: string;
+  id?: string;
 }

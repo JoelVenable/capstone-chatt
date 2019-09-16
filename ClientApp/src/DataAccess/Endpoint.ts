@@ -128,7 +128,6 @@ export class Endpoint<T, R> {
     options?: ResponseInit
   ): Promise<T[]> => {
     const url = urlArgs ? this.endpointURL + urlArgs : this.endpointURL;
-    console.log(url);
     const request = new Request(url, {
       method: "GET",
       headers: this.buildHeaders(),

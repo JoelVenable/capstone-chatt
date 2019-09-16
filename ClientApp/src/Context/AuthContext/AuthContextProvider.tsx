@@ -13,30 +13,36 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
     switch (actions.type) {
       case "SIGN_IN":
         return {
-          ...state,
+          authResolving: false,
           isAuthenticated: true,
-          userEmail: actions.email
+          userEmail: actions.email,
+          userHandle: actions.handle,
+          userId: actions.id
         };
       case "RESOLVE_LOGGED_IN":
         return {
-          ...state,
           authResolving: false,
           isAuthenticated: true,
-          userEmail: actions.email
+          userEmail: actions.email,
+          userHandle: actions.handle,
+          userId: actions.id
         };
       case "RESOLVE_NOT_LOGGED_IN":
         return {
-          ...state,
           authResolving: false,
           isAuthenticated: false,
-          userEmail: undefined
+          userEmail: undefined,
+          userHandle: undefined,
+          userId: undefined
         };
 
       case "SIGN_OUT":
         return {
-          ...state,
+          authResolving: false,
           isAuthenticated: false,
-          userEmail: undefined
+          userEmail: undefined,
+          userHandle: undefined,
+          userId: undefined
         };
       default:
         throw new Error("Unhandled reducer action in Auth Context");
@@ -46,15 +52,24 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
   const [status, setStatus] = React.useReducer(reducer, {
     isAuthenticated: false,
     authResolving: true,
-    userEmail: undefined
+    userEmail: undefined,
+    userId: undefined,
+    userHandle: undefined
   });
+
+  console.log(status);
 
   React.useEffect(() => {
     //  resolve auth
     const endpoint = new Endpoint("");
     const profile = endpoint.getProfile();
     if (profile) {
-      setStatus({ type: "RESOLVE_LOGGED_IN", email: profile.email });
+      setStatus({
+        type: "RESOLVE_LOGGED_IN",
+        email: profile.email,
+        handle: profile.unique_name,
+        id: profile.sub
+      });
     } else setStatus({ type: "RESOLVE_NOT_LOGGED_IN" });
   }, []);
 
@@ -64,9 +79,15 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
         let endpoint = new Endpoint<any, any>("");
 
         const { response } = await endpoint.loginOrRegister(cred);
+        const profile = endpoint.getProfile();
 
-        if (response === "SUCCESS")
-          setStatus({ type: "SIGN_IN", email: cred.username });
+        if (response === "SUCCESS" && profile)
+          setStatus({
+            type: "SIGN_IN",
+            email: profile.email,
+            handle: profile.unique_name,
+            id: profile.sub
+          });
         return { response };
       },
       signUp: async cred => {
