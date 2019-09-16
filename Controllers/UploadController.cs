@@ -20,21 +20,13 @@ namespace Chatt.Controllers
     public class UploadController : ControllerBase
     {
 
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMyUserManager _userManager;
         private readonly ApplicationDbContext _context;
 
-        private async Task<ApplicationUser> GetActiveUser()
-        {
-            ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
-            if (principal != null)
-            {
-                return await _userManager.GetUserAsync(principal);
-            }
-            else return null;
-        }
+      
 
         public UploadController(
-            UserManager<ApplicationUser> userManager,
+            IMyUserManager userManager,
             ApplicationDbContext context
             )
         {
@@ -49,7 +41,7 @@ namespace Chatt.Controllers
  
             try
             {
-                var user = await GetActiveUser();
+                var user = await _userManager.GetCurrentUserAsync(HttpContext);
                 if (user == null) throw new Exception();
 
                 var bigImg = Request.Form.Files[0];

@@ -45,6 +45,37 @@ namespace Chatt.Controllers
             return await _context.Groups.ToListAsync();
         }
 
+       
+
+
+
+        [HttpGet("myGroups")]
+        public async Task<ActionResult<IEnumerable<Group>>> GetMyGroups()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user == null) return NotFound();
+
+            var groups = await _context.GroupUsers
+                .Where(g => g.UserId == user.Id)
+                .Include(g => g.Group)
+                .Select(g => g.Group)
+                .ToListAsync();
+
+            return groups;
+
+
+        }
+
+        [HttpGet("find")]
+        public async Task<ActionResult<IEnumerable<Group>>> FindGroups([FromRoute] string q)
+        {
+            var groups = await _context.Groups.Where(g => g.Name.Contains(q)).ToListAsync();
+
+            return groups;
+        }
+
+
+
         // GET: api/Groups/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Group>> GetGroup(Guid id)
