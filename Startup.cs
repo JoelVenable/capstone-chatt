@@ -39,6 +39,8 @@ namespace Chatt
 
             services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(ConnectionString));
 
+            services.AddTransient<IMyUserManager, MyUserManager>();
+
 
             services.AddIdentity<ApplicationUser, IdentityRole>(
                 option =>
@@ -56,6 +58,7 @@ namespace Chatt
             {
                 option.DefaultAuthenticateScheme = scheme;
                 option.DefaultChallengeScheme = scheme;
+                option.DefaultSignInScheme = scheme;
                 option.DefaultScheme = scheme;
 
             }).AddJwtBearer(options =>
