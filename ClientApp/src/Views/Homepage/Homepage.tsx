@@ -7,24 +7,25 @@ import AddMessage from "../../Components/AddMessage/AddMessage";
 import { messageManager } from "../../DataAccess/messageManager";
 
 interface Props {
-  groupId: string
+  groupId: string;
 }
 
 const Homepage: React.FC<Props> = ({ groupId }: Props) => {
+  const [messages, setMessages] = useState<IMessage[]>([]);
 
-  const [messages, setMessages ] = useState<IMessage[]>([])
+  const fetchMessages = async () => {
+    if (groupId !== "") {
+      const newMessages = await messageManager.getAll();
 
-
+      setMessages(newMessages);
+    }
+  };
 
   useEffect(() => {
-    (async () => {
-      const newMessages = await messageManager.getAll()
+    (async () => {})();
+  }, [groupId]);
 
-    })
-  }, [groupId])
-
-
-  return <AddMessage />;
+  return <AddMessage groupId={groupId} />;
 };
 
 export default withWidth()(Homepage);
