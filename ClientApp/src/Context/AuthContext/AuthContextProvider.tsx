@@ -1,8 +1,8 @@
 ﻿import * as React from "react";
 import { AuthContext } from "./AuthContext";
-import { auth } from "../DataAccess/Auth";
+import { auth } from "../../DataAccess/Auth";
 import decode from "jwt-decode";
-import { Endpoint } from "../DataAccess/Endpoint";
+import { Endpoint } from "../../DataAccess/Endpoint";
 
 interface Props {
   children: React.ReactNode | React.ReactNodeArray;

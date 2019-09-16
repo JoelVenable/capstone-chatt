@@ -3,7 +3,7 @@ import { TextField } from "@material-ui/core";
 import { Link, withRouter } from "react-router-dom";
 
 import validateEmail from "../../Utility/validateEmail";
-import { useAuthContext } from "../../Context/useAuthContext";
+import { useAuthContext } from "../../Context/AuthContext/useAuthContext";
 import { AuthPageContainer } from "../../Layout/AuthPageContainer/AuthPageContainer";
 import CenteredButton from "../../Components/CenteredButton/CenteredButton";
 import { routeDefinitions } from "../../Router/routeDefinitions";
