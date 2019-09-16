@@ -10,6 +10,7 @@ using Chatt.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using Chatt.Models.ViewModels;
 
 namespace Chatt.Controllers
 {
@@ -20,19 +21,10 @@ namespace Chatt.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMyUserManager _userManager;
 
-        private async Task<ApplicationUser> GetActiveUser()
-        {
-            ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
-            if (principal != null)
-            {
-                return await _userManager.GetUserAsync(principal);
-            }
-            else return null;
-        }
 
-        public GroupsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public GroupsController(ApplicationDbContext context, IMyUserManager userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -44,6 +36,57 @@ namespace Chatt.Controllers
         {
             return await _context.Groups.ToListAsync();
         }
+
+
+
+
+
+        [HttpGet]
+        [Route("/api/[controller]/mygroups")]
+        public async Task<ActionResult<IEnumerable<Group>>> MyGroups()
+        {
+            var user = await _userManager.GetCurrentUserAsync(HttpContext);
+            if (user == null) return NotFound();
+
+            var groups = await _context.GroupUsers
+                .Where(g => g.UserId == user.Id)
+                .Include(g => g.Group)
+                .Select(g => g.Group)
+                .ToListAsync();
+
+            return groups;
+
+
+        }
+
+
+        [HttpGet]
+        [Route("/api/[controller]/othergroups")]
+        public async Task<ActionResult<IEnumerable<Group>>> OtherGroups()
+        {
+            var user = await _userManager.GetCurrentUserAsync(HttpContext);
+            if (user == null) return NotFound();
+
+            var myGroups = await _context.GroupUsers
+                .Where(g => g.UserId == user.Id)
+                .Include(g => g.Group)
+                .Select(g => g.Group)
+                .ToListAsync();
+
+            var otherGroups = await _context.Groups.Where(g => myGroups.Contains(g) == false).ToListAsync();
+
+            return otherGroups;
+        }
+
+        [HttpGet("find")]
+        public async Task<ActionResult<IEnumerable<Group>>> FindGroups([FromRoute] string q)
+        {
+            var groups = await _context.Groups.Where(g => g.Name.Contains(q)).ToListAsync();
+
+            return groups;
+        }
+
+
 
         // GET: api/Groups/5
         [HttpGet("{id}")]
@@ -93,12 +136,29 @@ namespace Chatt.Controllers
 
         // POST: api/Groups
         [HttpPost]
-        public async Task<ActionResult<Group>> PostGroup(Group @group)
+        public async Task<ActionResult<Group>> PostGroup(PostGroup data)
         {
-            _context.Groups.Add(@group);
+            var user = await _userManager.GetCurrentUserAsync(HttpContext);
+            var group = new Group()
+            {
+                Name = data.Name,
+                IsPrivate = data.IsPrivate,
+                IsProtected = data.IsProtected,
+                DateCreated = DateTime.UtcNow
+            };
+
+            var groupUser = new GroupUser()
+            {
+                GroupId = group.Id,
+                UserId = user.Id,
+                DateCreated = DateTime.UtcNow,
+                DateActive = DateTime.UtcNow
+            };
+            _context.Groups.Add(group);
+            _context.GroupUsers.Add(groupUser);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetGroup", new { id = @group.Id }, @group);
+            return CreatedAtAction("GetGroup", new { id = group.Id }, group);
         }
 
         // DELETE: api/Groups/5

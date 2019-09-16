@@ -1,8 +1,8 @@
 ﻿import * as React from "react";
 import { AuthContext } from "./AuthContext";
-import { auth } from "../DataAccess/Auth";
+import { auth } from "../../DataAccess/Auth";
 import decode from "jwt-decode";
-import { Endpoint } from "../DataAccess/Endpoint";
+import { Endpoint } from "../../DataAccess/Endpoint";
 
 interface Props {
   children: React.ReactNode | React.ReactNodeArray;
@@ -20,12 +20,14 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
       case "RESOLVE_LOGGED_IN":
         return {
           ...state,
+          authResolving: false,
           isAuthenticated: true,
           userEmail: actions.email
         };
       case "RESOLVE_NOT_LOGGED_IN":
         return {
           ...state,
+          authResolving: false,
           isAuthenticated: false,
           userEmail: undefined
         };
@@ -89,6 +91,7 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
       signOut: async () => {
         let endpoint = new Endpoint("");
         endpoint.logout();
+        setStatus({ type: "SIGN_OUT" });
         return { response: "SUCCESS" } as IActionResult;
       },
       changePassword: async (old, newp) => {

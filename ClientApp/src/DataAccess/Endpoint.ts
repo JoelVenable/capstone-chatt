@@ -75,6 +75,7 @@ export class Endpoint<T, R> {
   private isTokenExpired = (token: string): boolean => {
     try {
       const decoded = decode<ITokenEncoded>(token);
+
       const expDate = moment(decoded.expiration);
 
       if (expDate.isBefore(Date.now())) return true;
@@ -101,7 +102,10 @@ export class Endpoint<T, R> {
     return requestHeaders;
   };
 
-  fetch = async (urlArgs?: string, options?: ResponseInit): Promise<T> => {
+  fetch = async (
+    urlArgs?: string,
+    options?: ResponseInit
+  ): Promise<T | undefined> => {
     const url = urlArgs ? this.endpointURL + urlArgs : this.endpointURL;
 
     const request = new Request(url, {
@@ -109,10 +113,14 @@ export class Endpoint<T, R> {
       headers: this.buildHeaders(),
       ...options
     });
-
-    return fetch(request)
-      .then(r => r.json())
-      .then(r => r as T);
+    try {
+      return fetch(request)
+        .then(this.checkStatus)
+        .then(r => r.json())
+        .then(r => r as T);
+    } catch (e) {
+      return undefined;
+    }
   };
 
   fetchList = async (
@@ -120,15 +128,22 @@ export class Endpoint<T, R> {
     options?: ResponseInit
   ): Promise<T[]> => {
     const url = urlArgs ? this.endpointURL + urlArgs : this.endpointURL;
-
+    console.log(url);
     const request = new Request(url, {
       method: "GET",
       headers: this.buildHeaders(),
       ...options
     });
-    return fetch(request)
-      .then(r => r.json())
-      .then(r => r.map((i: unknown) => i as T));
+    try {
+      const data = await fetch(request)
+        .then(this.checkStatus)
+        .then(r => r.json())
+        .then(r => r.map((i: unknown) => i as T));
+      return data;
+    } catch (e) {
+      console.log(e);
+      return [];
+    }
   };
 
   post = async (obj: T, urlArgs: string = ""): Promise<IActionResult> => {

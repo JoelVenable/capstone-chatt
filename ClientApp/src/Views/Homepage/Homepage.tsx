@@ -3,25 +3,28 @@ import { RouteComponentProps } from "react-router-dom";
 
 import { Grid, withWidth } from "@material-ui/core";
 import { WithWidth } from "@material-ui/core/withWidth";
+import AddMessage from "../../Components/AddMessage/AddMessage";
+import { messageManager } from "../../DataAccess/messageManager";
 
-interface Props extends RouteComponentProps, WithWidth {}
+interface Props {
+  groupId: string
+}
 
-const Homepage: React.FC<Props> = ({ width }: Props) => {
-  const [drawerOpen, setDrawerOpen] = useState(true);
+const Homepage: React.FC<Props> = ({ groupId }: Props) => {
 
-  let toggleOpen = () => setDrawerOpen(!drawerOpen);
+  const [messages, setMessages ] = useState<IMessage[]>([])
+
+
 
   useEffect(() => {
-    if (width === "md" || width === "lg" || width === "xl") {
-      // Disable controls
-      toggleOpen = () => {};
-      setDrawerOpen(true);
-    } else {
-      toggleOpen = () => setDrawerOpen(!drawerOpen);
-    }
-  }, [width, drawerOpen]);
+    (async () => {
+      const newMessages = await messageManager.getAll()
 
-  return <Grid container></Grid>;
+    })
+  }, [groupId])
+
+
+  return <AddMessage />;
 };
 
 export default withWidth()(Homepage);

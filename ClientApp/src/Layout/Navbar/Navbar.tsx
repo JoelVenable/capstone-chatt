@@ -1,21 +1,46 @@
 ﻿import * as React from "react";
-import { AppBar, Toolbar, Typography, Button } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Hidden,
+  IconButton
+} from "@material-ui/core";
+import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 import { routeDefinitions } from "../../Router/routeDefinitions";
 import clsx from "clsx";
 import useNavbarStyles from "./useNavBarStyle";
-import { AuthContext } from "../../Context/AuthContext";
+import { Menu } from "@material-ui/icons";
+import { useAuthContext } from "../../Context/AuthContext/useAuthContext";
 
-interface Props {
+interface Props extends RouteComponentProps {
   drawerExpanded: boolean;
+  showDrawer?: Function;
 }
 
-const Navbar: React.FC<Props> = ({ drawerExpanded }: Props) => {
+const Navbar: React.FC<Props> = ({
+  drawerExpanded,
+  history,
+  showDrawer
+}: Props) => {
   const classes = useNavbarStyles({});
   const {
     actions: { signOut },
-    status: { isAuthenticated }
-  } = React.useContext(AuthContext);
+    status: { isAuthenticated, authResolving }
+  } = useAuthContext();
+
+  const handleLogout = () => {
+    signOut();
+    history.push(routeDefinitions.LOGIN);
+  };
+
+  const handleShowControlClick = (e: React.SyntheticEvent) => {
+    if (showDrawer) showDrawer();
+  };
+
+  const showControl =
+    isAuthenticated && !authResolving && !drawerExpanded && showDrawer;
 
   return (
     <div
@@ -24,11 +49,23 @@ const Navbar: React.FC<Props> = ({ drawerExpanded }: Props) => {
       })}>
       <AppBar position="static" color="primary">
         <Toolbar>
+          <Hidden mdUp>
+            {showControl ? (
+              <IconButton
+                edge="start"
+                className={classes.menuButton}
+                color="inherit"
+                onClick={handleShowControlClick}
+                aria-label="menu">
+                <Menu />
+              </IconButton>
+            ) : null}
+          </Hidden>
           <Typography variant="h4" className={classes.title}>
             Chatt
           </Typography>
           {isAuthenticated ? (
-            <Button onClick={signOut} color="inherit">
+            <Button onClick={handleLogout} color="inherit">
               Logout
             </Button>
           ) : (
@@ -45,4 +82,4 @@ const Navbar: React.FC<Props> = ({ drawerExpanded }: Props) => {
   );
 };
 
-export default Navbar;
+export default withRouter(Navbar);

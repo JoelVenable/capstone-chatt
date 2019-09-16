@@ -1,11 +1,12 @@
 ﻿import * as React from "react";
 import { Route, Redirect, RouteProps } from "react-router-dom";
-import { AuthContext } from "../../../Context/AuthContext";
-
+import { AuthContext } from "../../../Context/AuthContext/AuthContext";
+import { routeDefinitions } from "../../../Router/routeDefinitions";
 const AuthenticatedRoute: React.FC<RouteProps> = ({
   path,
   exact,
-  component
+  component,
+  render
 }: RouteProps) => {
   const {
     status: { isAuthenticated, authResolving }
@@ -13,7 +14,11 @@ const AuthenticatedRoute: React.FC<RouteProps> = ({
 
   if (authResolving) return <> </>;
 
-  return <Route path={path} exact={exact} component={component} />;
+  if (!isAuthenticated) return <Redirect to={routeDefinitions.LOGIN} />;
+
+  return (
+    <Route path={path} exact={exact} component={component} render={render} />
+  );
 };
 
 export default AuthenticatedRoute;

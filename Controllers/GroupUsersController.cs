@@ -10,6 +10,8 @@ using Chatt.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using System.Web.Helpers;
+using Chatt.Models.ViewModels;
 
 namespace Chatt.Controllers
 {
@@ -20,20 +22,12 @@ namespace Chatt.Controllers
     {
 
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMyUserManager _userManager;
 
-        private async Task<ApplicationUser> GetActiveUser()
-        {
-            ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
-            if (principal != null)
-            {
-                return await _userManager.GetUserAsync(principal);
-            }
-            else return null;
-        }
+      
 
 
-        public GroupUsersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public GroupUsersController(ApplicationDbContext context, IMyUserManager userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -92,13 +86,35 @@ namespace Chatt.Controllers
 
         // POST: api/GroupUsers
         [HttpPost]
-        public async Task<ActionResult<GroupUser>> PostGroupUser(GroupUser groupUser)
+        public async Task<IActionResult> PostGroupUser(GroupUserPost data)
         {
+
+            var user = await _userManager.GetCurrentUserAsync(HttpContext);
+            var group = await _context.Groups.FindAsync(data.GroupId);
+            if (user == null || group == null)
+            {
+                return NotFound();
+            }
+            var existingGroupUser = await _context.GroupUsers
+                .Where(gu => gu.UserId == user.Id && gu.GroupId == group.Id)
+                .FirstOrDefaultAsync();
+            if (existingGroupUser != null)
+            {
+                return BadRequest();
+            } 
+            var groupUser = new GroupUser()
+            {
+                GroupId = group.Id,
+                UserId = user.Id,
+                DateCreated = DateTime.UtcNow,
+                DateActive = DateTime.UtcNow
+            };
             _context.GroupUsers.Add(groupUser);
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetGroupUser", new { id = groupUser.Id }, groupUser);
+            return Ok();
         }
+
+
 
         // DELETE: api/GroupUsers/5
         [HttpDelete("{id}")]
