@@ -116,7 +116,7 @@ namespace Chatt.Controllers
             {
                 return NotFound();
             }
-            message.Text = null;
+            message.Text = "";
             message.IsDeleted = true;
             await _context.SaveChangesAsync();
 

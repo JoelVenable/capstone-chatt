@@ -3,15 +3,12 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  TextField,
-  FormGroup,
-  FormControlLabel,
   DialogActions,
-  Button
+  Button,
+  DialogContentText
 } from "@material-ui/core";
-import { myColors } from "../../theme";
 import { messageManager } from "../../DataAccess/messageManager";
-
+import { myColors } from "../../theme";
 interface Props {
   open: boolean;
   openControl: Function;
@@ -26,50 +23,37 @@ const DeleteMessageDialog: React.FC<Props> = ({
   startingText,
   setUpdate
 }: Props) => {
-  const [text, setText] = useState<string>(startingText);
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleClose = () => openControl(false);
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
-    const { value } = e.currentTarget;
-    setText(value);
-  };
-
   const handleSubmit: React.FormEventHandler = async e => {
     e.preventDefault();
     setLoading(true);
-    const { response } = await messageManager.put({
-      id: messageId,
-      text
-    });
+    const { response } = await messageManager.delete(`/${messageId}`);
     if (response === "SUCCESS") {
       handleClose();
       setUpdate(Math.random());
     }
-    setUpdate(Math.random());
     setLoading(false);
   };
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Add a Group</DialogTitle>
+      <DialogTitle>Delete Message</DialogTitle>
       <DialogContent>
-        <form>
-          <TextField
-            label="Edit your message"
-            value={text}
-            style={{ backgroundColor: myColors.white }}
-            onChange={handleChange}
-            disabled={loading}
-            id="groupName"
-            variant="filled"
-          />
-        </form>
+        <DialogContentText>
+          Are you sure you want to delete this message?
+          <p>{startingText}</p>
+        </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit} disabled={loading}>
+        <Button
+          onClick={handleSubmit}
+          disabled={loading}
+          variant="contained"
+          style={{ backgroundColor: myColors.error }}>
           Delete Message
         </Button>
       </DialogActions>
