@@ -59,7 +59,7 @@ const EditUserDialog: React.FC<Props> = ({ open, handleClose }: Props) => {
     });
   };
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <DialogTitle>User Settings</DialogTitle>
       <Divider />
       <form>
