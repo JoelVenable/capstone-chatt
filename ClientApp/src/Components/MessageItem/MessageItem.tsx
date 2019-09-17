@@ -71,10 +71,11 @@ const MessageItem: React.FC<Props> = ({ message, width, setUpdate }: Props) => {
               messageId={message.id}
               setUpdate={setUpdate}
               messageText={message.text}
+              isDeleted={message.isDeleted}
             />
           </HeaderOuter>
 
-          <p>{message.text}</p>
+          {message.isDeleted ? <p>deleted</p> : <p>{message.text}</p>}
         </ContentDiv>
       </MessageContainerDiv>
     </Card>
