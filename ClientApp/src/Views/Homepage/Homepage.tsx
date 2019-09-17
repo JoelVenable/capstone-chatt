@@ -1,8 +1,5 @@
 ﻿import React, { useState, useEffect } from "react";
-import { RouteComponentProps } from "react-router-dom";
 
-import { Grid, withWidth } from "@material-ui/core";
-import { WithWidth } from "@material-ui/core/withWidth";
 import AddMessage from "../../Components/AddMessage/AddMessage";
 import { messageManager } from "../../DataAccess/messageManager";
 import styled from "@emotion/styled";
@@ -22,15 +19,15 @@ interface Props {
 const Homepage: React.FC<Props> = ({ groupId, update, setUpdate }: Props) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
 
-  const fetchMessages = async () => {
-    if (groupId !== "") {
-      const newMessages = await messageManager.getAll(groupId);
-
-      setMessages(newMessages);
-    }
-  };
-
   useEffect(() => {
+    const fetchMessages = async () => {
+      if (groupId !== "") {
+        const newMessages = await messageManager.getAll(groupId);
+
+        setMessages(newMessages);
+      }
+    };
+
     (async () => {
       fetchMessages();
     })();
@@ -49,4 +46,4 @@ const Homepage: React.FC<Props> = ({ groupId, update, setUpdate }: Props) => {
   );
 };
 
-export default withWidth()(Homepage);
+export default Homepage;

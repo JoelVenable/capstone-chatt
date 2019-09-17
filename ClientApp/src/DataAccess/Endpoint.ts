@@ -38,7 +38,7 @@ export class Endpoint<T, R> {
 
   private setToken = (response: ITokenEncoded): void => {
     localStorage.setItem(sessionVars.TOKEN, response.token);
-    localStorage.setItem(sessionVars.EXPIRATION, response.expiration);
+    localStorage.setItem(sessionVars.EXPIRATION, response.exp.toString());
   };
   private getToken = () => localStorage.getItem(sessionVars.TOKEN);
   logout = (): void => {
@@ -78,19 +78,23 @@ export class Endpoint<T, R> {
   private isTokenExpired = (token: string): boolean => {
     try {
       const decoded = decode<ITokenEncoded>(token);
-
-      const expDate = moment(decoded.expiration);
-
-      if (expDate.isBefore(Date.now())) return true;
-      else return false;
+      const expDate = moment(decoded.exp);
+      const test = expDate.isBefore(Date.now());
+      if (test) return false;
+      else return true;
     } catch (err) {
-      return false;
+      return true;
     }
   };
 
   private loggedIn = (): boolean => {
     const token = this.getToken();
-    return !!token && !this.isTokenExpired(token);
+    const exists = !!token;
+    let isExpired: boolean = true;
+    if (token) isExpired = this.isTokenExpired(token);
+    console.log(exists);
+    console.log(isExpired);
+    return exists && !isExpired;
   };
 
   buildHeaders = (): HeadersInit => {
@@ -98,7 +102,9 @@ export class Endpoint<T, R> {
     requestHeaders.append("Content-Type", "application/json");
     requestHeaders.append("Accept", "application/json");
 
-    if (this.loggedIn()) {
+    const result = this.loggedIn();
+    console.log(result);
+    if (result) {
       requestHeaders.append("credentials", "include");
       requestHeaders.append("Authorization", `Bearer ${this.getToken()}`);
     }

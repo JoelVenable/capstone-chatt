@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuthContext } from "../../Context/AuthContext/useAuthContext";
 import clsx from "clsx";
 import useGroupPanelStyles from "./useGroupPanelStyles";

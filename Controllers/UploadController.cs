@@ -23,7 +23,7 @@ namespace Chatt.Controllers
         private readonly IMyUserManager _userManager;
         private readonly ApplicationDbContext _context;
 
-      
+
 
         public UploadController(
             IMyUserManager userManager,
@@ -37,8 +37,8 @@ namespace Chatt.Controllers
         [HttpPost, RequestSizeLimit(512000)]
         public async Task<IActionResult> Upload()
         {
- 
- 
+
+
             try
             {
                 var user = await _userManager.GetCurrentUserAsync(HttpContext);
@@ -52,17 +52,19 @@ namespace Chatt.Controllers
 
                 if (imgDbPath != null && avatarPath != null)
                 {
-                    var applicationUser = await _context.Users.FindAsync(user.Id);
-                    if (applicationUser == null) throw new Exception();
+                    user.ThumbUrl = avatarPath;
+                    user.ImageUrl = imgDbPath;
+                    var result = await _userManager.UpdateUserAsync(user);
+                    if (result.Succeeded)
+                    {
+                        return Ok(new { ImageUrl = imgDbPath, ThumbUrl = avatarPath });
+                    }
+                    else return StatusCode(500, "Error saving user data");
 
-                    applicationUser.ThumbUrl = avatarPath;
-                    applicationUser.ImageUrl = imgDbPath;
-                    await _context.SaveChangesAsync();
-                    return Ok(new { imgDbPath, avatarPath });
                 }
                 else return BadRequest();
 
-                
+
             }
             catch (Exception)
             {

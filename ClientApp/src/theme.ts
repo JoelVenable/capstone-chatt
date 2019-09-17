@@ -1,6 +1,4 @@
-﻿import teal from "@material-ui/core/colors/teal";
-
-import { createMuiTheme } from "@material-ui/core/styles";
+﻿import { createMuiTheme } from "@material-ui/core/styles";
 
 // Example color scheme
 // #009688 (teal)

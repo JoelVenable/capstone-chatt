@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent, Typography } from "@material-ui/core";
+import { Card, Typography } from "@material-ui/core";
 import styled from "@emotion/styled";
 import UserAvatar from "./UserAvatar";
 import moment from "moment";

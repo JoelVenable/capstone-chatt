@@ -5,35 +5,36 @@ import {
   Typography,
   Button,
   Hidden,
-  IconButton
+  IconButton,
+  withWidth
 } from "@material-ui/core";
-import { Link, RouteComponentProps, withRouter } from "react-router-dom";
-import { routeDefinitions } from "../../Router/routeDefinitions";
 import clsx from "clsx";
 import useNavbarStyles from "./useNavBarStyle";
-import { Menu } from "@material-ui/icons";
+import { Apps } from "@material-ui/icons";
 import { useAuthContext } from "../../Context/AuthContext/useAuthContext";
+import { WithWidth } from "@material-ui/core/withWidth";
+import EditUserDialog from "../EditUserDialog/EditUserDialog";
+import MobileMenu from "./MobileMenu";
+import DesktopMenu from "./DesktopMenu";
 
-interface Props extends RouteComponentProps {
+interface Props extends WithWidth {
   drawerExpanded: boolean;
   showDrawer?: Function;
 }
 
 const Navbar: React.FC<Props> = ({
   drawerExpanded,
-  history,
-  showDrawer
+  showDrawer,
+  width
 }: Props) => {
   const classes = useNavbarStyles({});
   const {
-    actions: { signOut },
     status: { isAuthenticated, authResolving }
   } = useAuthContext();
 
-  const handleLogout = () => {
-    signOut();
-    history.push(routeDefinitions.LOGIN);
-  };
+  const [settingsOpen, setSettingsOpen] = React.useState<boolean>(true);
+
+  const handleSettingsClose = () => setSettingsOpen(false);
 
   const handleShowControlClick = (e: React.SyntheticEvent) => {
     if (showDrawer) showDrawer();
@@ -42,6 +43,7 @@ const Navbar: React.FC<Props> = ({
   const showControl =
     isAuthenticated && !authResolving && !drawerExpanded && showDrawer;
 
+  console.log(width);
   return (
     <div
       className={clsx(classes.appBar, {
@@ -57,29 +59,23 @@ const Navbar: React.FC<Props> = ({
                 color="inherit"
                 onClick={handleShowControlClick}
                 aria-label="menu">
-                <Menu />
+                <Apps />
               </IconButton>
             ) : null}
           </Hidden>
           <Typography variant="h4" className={classes.title}>
             Chatt
           </Typography>
-          {isAuthenticated ? (
-            <Button onClick={handleLogout} color="inherit">
-              Logout
-            </Button>
+          {width === "xs" ? (
+            <MobileMenu setSettingsOpen={setSettingsOpen} />
           ) : (
-            <Button
-              component={Link}
-              to={routeDefinitions.LOGIN}
-              color="inherit">
-              Login
-            </Button>
+            <DesktopMenu />
           )}
         </Toolbar>
       </AppBar>
+      <EditUserDialog open={settingsOpen} handleClose={handleSettingsClose} />
     </div>
   );
 };
 
-export default withRouter(Navbar);
+export default withWidth()(Navbar);
