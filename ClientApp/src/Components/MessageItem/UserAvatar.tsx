@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { myColors } from "../../theme";
 import { Avatar } from "@material-ui/core";
+import { deepOrange } from "@material-ui/core/colors";
 
 const AvatarDiv = styled.div`
   width: 60px;
@@ -10,7 +11,7 @@ const AvatarDiv = styled.div`
   justify-content: center;
   padding-top: 0.8rem;
   padding-bottom: 0.8rem;
-  background-color: ${myColors.darkBlue};
+  background-color: ${myColors.lightGrey};
 `;
 
 interface Props {
@@ -29,7 +30,11 @@ const UserAvatar: React.FC<Props> = ({ imageUrl, name, initials }: Props) => {
           style={{ boxShadow: `0px 0px 12px ${myColors.lightGrey}` }}
         />
       ) : (
-        <Avatar style={{ boxShadow: `0px 0px 12px ${myColors.lightGrey}` }}>
+        <Avatar
+          style={{
+            boxShadow: `0px 0px 12px ${myColors.darkGrey}`,
+            backgroundColor: myColors.medBlue
+          }}>
           {initials}
         </Avatar>
       )}

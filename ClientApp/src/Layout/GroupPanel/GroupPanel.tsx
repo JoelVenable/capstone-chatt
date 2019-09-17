@@ -19,15 +19,18 @@ interface Props {
   variant: "persistent" | "temporary";
   hideDrawer: Function;
   setActiveGroup: Function;
+  update: number;
+  setUpdate: Function;
 }
 
 const GroupPanel: React.FC<Props> = ({
   drawerExpanded,
   variant,
   hideDrawer,
-  setActiveGroup
+  setActiveGroup,
+  update,
+  setUpdate
 }: Props) => {
-  const [update, setUpdate] = useState<number>(Math.random());
   const classes = useGroupPanelStyles();
 
   const handleClose = () => hideDrawer();

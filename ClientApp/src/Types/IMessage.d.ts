@@ -4,7 +4,7 @@ interface IMessage {
   senderId?: string;
   sender?: IApplicationUser;
   messageSender?: IApplicationUser;
-  groupId: string;
+  groupId?: string;
   group?: IGroup;
   text: string;
   thread?: IMessage[];

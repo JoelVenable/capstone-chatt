@@ -1,7 +1,5 @@
 ﻿import * as React from "react";
 import { AuthContext } from "./AuthContext";
-import { auth } from "../../DataAccess/Auth";
-import decode from "jwt-decode";
 import { Endpoint } from "../../DataAccess/Endpoint";
 
 interface Props {
@@ -64,12 +62,14 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
     const endpoint = new Endpoint("");
     const profile = endpoint.getProfile();
     if (profile) {
-      setStatus({
-        type: "RESOLVE_LOGGED_IN",
-        email: profile.email,
-        handle: profile.unique_name,
-        id: profile.sub
-      });
+      setTimeout(() => {
+        setStatus({
+          type: "RESOLVE_LOGGED_IN",
+          email: profile.email,
+          handle: profile.unique_name,
+          id: profile.sub
+        });
+      }, 200);
     } else setStatus({ type: "RESOLVE_NOT_LOGGED_IN" });
   }, []);
 
