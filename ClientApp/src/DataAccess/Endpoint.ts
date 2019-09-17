@@ -38,7 +38,7 @@ export class Endpoint<T, R> {
 
   private setToken = (response: ITokenEncoded): void => {
     localStorage.setItem(sessionVars.TOKEN, response.token);
-    localStorage.setItem(sessionVars.EXPIRATION, response.expiration);
+    localStorage.setItem(sessionVars.EXPIRATION, response.exp.toString());
   };
   private getToken = () => localStorage.getItem(sessionVars.TOKEN);
   logout = (): void => {
@@ -79,7 +79,7 @@ export class Endpoint<T, R> {
     try {
       const decoded = decode<ITokenEncoded>(token);
 
-      const expDate = moment(decoded.expiration);
+      const expDate = moment(decoded.exp);
 
       if (expDate.isBefore(Date.now())) return true;
       else return false;
