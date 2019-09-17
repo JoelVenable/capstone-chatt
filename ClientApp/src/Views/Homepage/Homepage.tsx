@@ -15,9 +15,11 @@ const MessageContainer = styled.div`
 
 interface Props {
   groupId: string;
+  update: number;
+  setUpdate: Function;
 }
 
-const Homepage: React.FC<Props> = ({ groupId }: Props) => {
+const Homepage: React.FC<Props> = ({ groupId, update, setUpdate }: Props) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
 
   const fetchMessages = async () => {
@@ -38,7 +40,7 @@ const Homepage: React.FC<Props> = ({ groupId }: Props) => {
     <>
       <MessageContainer>
         {messages.map(m => (
-          <MessageItem message={m} key={m.id} />
+          <MessageItem message={m} key={m.id} setUpdate={setUpdate} />
         ))}
       </MessageContainer>
 

@@ -12,6 +12,7 @@ namespace Chatt.Models
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
 
 
+
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
 

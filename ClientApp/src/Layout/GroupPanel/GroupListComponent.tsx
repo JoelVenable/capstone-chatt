@@ -22,14 +22,12 @@ const GroupListComponent: React.FC<Props> = ({
   const [groups, setGroups] = useState<IGroup[]>([]);
 
   const handleGroupClick = (e: SyntheticEvent<HTMLDivElement, MouseEvent>) => {
-    console.log(e.currentTarget.id);
     setActiveGroup(e.currentTarget.id);
   };
 
   useEffect(() => {
     (async () => {
       const data = await groupManager.getAll();
-      console.log("hello from fetch call");
       setGroups(data);
     })();
   }, [isAuthenticated, authResolving, update]);

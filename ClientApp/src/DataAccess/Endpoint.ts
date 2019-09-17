@@ -41,7 +41,10 @@ export class Endpoint<T, R> {
     localStorage.setItem(sessionVars.EXPIRATION, response.expiration);
   };
   private getToken = () => localStorage.getItem(sessionVars.TOKEN);
-  logout = (): void => localStorage.removeItem(sessionVars.TOKEN);
+  logout = (): void => {
+    localStorage.removeItem(sessionVars.TOKEN);
+    localStorage.removeItem(sessionVars.EXPIRATION);
+  };
 
   loginOrRegister = async (
     cred: IUserCredentials | IUserRegistration
@@ -128,7 +131,6 @@ export class Endpoint<T, R> {
     options?: ResponseInit
   ): Promise<T[]> => {
     const url = urlArgs ? this.endpointURL + urlArgs : this.endpointURL;
-    console.log(url);
     const request = new Request(url, {
       method: "GET",
       headers: this.buildHeaders(),

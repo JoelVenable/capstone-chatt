@@ -29,7 +29,7 @@ namespace Chatt.Controllers
             _context = context;
         }
 
-        
+
 
         // GET: api/Messages/5
         [HttpGet("{id}")]
@@ -37,42 +37,52 @@ namespace Chatt.Controllers
         {
             //  id is actually a GROUP id.
 
-            var messages = await _context.Messages.Where(m => m.GroupId == id).ToListAsync();
+            var messages = await _context.Messages
+                .Where(m => m.GroupId == id && m.ParentMessageId == null)
+                .Include(m => m.Thread)
+                .Include(m => m.Sender)
+                .ToListAsync();
 
             if (messages == null)
             {
                 return NotFound();
             }
 
-            return messages;
+
+            return Ok(messages.Select(msg =>
+            {
+                msg.MessageSender = new UserViewModel()
+                {
+                    Id = msg.Sender.Id,
+                    DateCreated = msg.Sender.DateCreated,
+                    FirstName = msg.Sender.FirstName,
+                    LastName = msg.Sender.LastName,
+                    Handle = msg.Sender.Handle,
+                    ImageUrl = msg.Sender.ImageUrl,
+                    ThumbUrl = msg.Sender.ThumbUrl,
+                    IsOnline = msg.Sender.IsOnline,
+                    LastActive = msg.Sender.LastActive,
+                };
+                msg.Sender = null;
+                return msg;
+
+            }));
         }
 
-        // PUT: api/Messages/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMessage([FromRoute] Guid id, [FromBody] Message message)
+        // PUT: api/Messages
+        [HttpPut]
+        public async Task<IActionResult> PutMessage([FromBody] EditMessage editedMessage)
         {
-            if (id != message.Id)
-            {
-                return BadRequest();
-            }
+            var user = await _userManager.GetCurrentUserAsync(HttpContext);
 
-            _context.Entry(message).State = EntityState.Modified;
+            var message = await _context.Messages.FirstAsync(m => m.Id == editedMessage.Id);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MessageExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            if (message == null || message.SenderId != user.Id) return BadRequest();
+
+            message.Text = editedMessage.Text;
+            message.IsModified = true;
+
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }

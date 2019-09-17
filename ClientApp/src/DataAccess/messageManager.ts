@@ -2,6 +2,11 @@ import { Endpoint } from "./Endpoint";
 
 const endpoint = new Endpoint<IMessage, {}>("messages");
 
+interface PutMessage {
+  id: string
+  text: string
+}
+
 export const messageManager = {
   getAll: async (id: string): Promise<IMessage[]> => {
     return endpoint.fetchList(`/${id}`);
@@ -14,5 +19,8 @@ export const messageManager = {
   },
   delete: async (id: string): Promise<IActionResult> => {
     return endpoint.delete(id);
+  },
+  put: async (newMessage: IMessage): Promise<IActionResult> => {
+    return endpoint.put(newMessage, "");
   }
 };

@@ -72,7 +72,8 @@ namespace Chatt.Controllers
                 var claims = new[]
                 {
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Handle)
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                    new Claim(JwtRegisteredClaimNames.UniqueName, user.Handle)
                 };
                 var signinKey = new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(_configuration["Jwt:SigningKey"])

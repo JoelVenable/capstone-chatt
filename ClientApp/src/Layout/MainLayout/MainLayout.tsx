@@ -17,6 +17,7 @@ const MainLayout: React.FC<WithWidth> = ({ width }: WithWidth) => {
   const [variant, setVariant] = useState<"persistent" | "temporary">(
     "temporary"
   );
+  const [update, setUpdate] = useState<number>(Math.random());
 
   const [activeGroup, setActiveGroup] = useState<string>("");
 
@@ -38,13 +39,19 @@ const MainLayout: React.FC<WithWidth> = ({ width }: WithWidth) => {
           variant={variant}
           hideDrawer={hideDrawer}
           setActiveGroup={setActiveGroup}
+          update={update}
+          setUpdate={setUpdate}
         />
         <Navbar drawerExpanded={expanded} showDrawer={showDrawer} />
         <Container
           className={clsx(classes.content, {
             [classes.contentShift]: expanded
           })}>
-          <Homepage groupId={activeGroup} />
+          <Homepage
+            groupId={activeGroup}
+            update={update}
+            setUpdate={setUpdate}
+          />
         </Container>
       </>
     );

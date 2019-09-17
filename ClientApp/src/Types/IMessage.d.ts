@@ -3,7 +3,8 @@ interface IMessage {
   dateCreated?: string;
   senderId?: string;
   sender?: IApplicationUser;
-  groupId: string;
+  messageSender?: IApplicationUser;
+  groupId?: string;
   group?: IGroup;
   text: string;
   thread?: IMessage[];
