@@ -1,4 +1,5 @@
 ﻿using Chatt.Models;
+using Chatt.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -36,6 +37,27 @@ namespace Chatt.Data
             }
             return null;
         }
+
+        public async Task<UserViewModel> GetCurrentUserViewModelAsync(HttpContext context)
+        {
+            var appUser = await GetCurrentUserAsync(context);
+
+            var returnUser = new UserViewModel()
+            {
+                Id = appUser.Id,
+                DateCreated = appUser.DateCreated,
+                FirstName = appUser.FirstName,
+                LastName = appUser.LastName,
+                Handle = appUser.Handle,
+                ImageUrl = appUser.ImageUrl,
+                ThumbUrl = appUser.ThumbUrl,
+                IsOnline = appUser.IsOnline,
+                LastActive = appUser.LastActive
+            };
+
+            return returnUser;
+        }
+
 
         public async Task<IdentityResult> UpdateUserAsync(ApplicationUser user)
         {

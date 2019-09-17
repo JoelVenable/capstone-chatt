@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core";
 import { myColors } from "../../theme";
 import styled from "@emotion/styled";
+import { userManager } from "../../DataAccess/userManager";
 interface Props {
   open: boolean;
   handleClose: React.MouseEventHandler<HTMLElement>;
@@ -37,10 +38,14 @@ const EditUserDialog: React.FC<Props> = ({ open, handleClose }: Props) => {
     if (id === "handle") setHandle(value);
   };
 
-  const handleSubmit: React.FormEventHandler<HTMLButtonElement> = e => {
+  const handleSubmit: React.FormEventHandler<HTMLButtonElement> = async e => {
     e.preventDefault();
     setLoading(true);
-    
+    const { response } = await userManager.put({
+      firstName,
+      lastName,
+      handle
+    });
   };
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
@@ -84,8 +89,14 @@ const EditUserDialog: React.FC<Props> = ({ open, handleClose }: Props) => {
           />
         </FormDiv>
         <Centered>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit} variant="contained" color="primary">
+          <Button onClick={handleClose} disabled={loading}>
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            disabled={loading}
+            variant="contained"
+            color="primary">
             Submit
           </Button>
         </Centered>

@@ -50,6 +50,16 @@ namespace Chatt.Controllers
             return NoContent();
         }
 
+        // GET: api/Groups
+        [HttpGet]
+        public async Task<ActionResult<UserViewModel>> GetMyAccount()
+        {
+            return await _myManager.GetCurrentUserViewModelAsync(HttpContext);
+
+        }
+
+
+
 
 
     }
