@@ -1,6 +1,7 @@
 import { Endpoint } from "./Endpoint";
 
-const endpoint = new Endpoint<PutUser, {}>("users");
+const putViewModelEndpoint = new Endpoint<PutUser, {}>("users");
+const getEndpoint = new Endpoint<IApplicationUser, {}>("users");
 
 interface PutUser {
   firstName: string;
@@ -9,7 +10,9 @@ interface PutUser {
 }
 
 export const userManager = {
+  get: async (): Promise<IApplicationUser | undefined> =>
+    getEndpoint.fetch("", {}),
   put: async (updatedUser: PutUser): Promise<IActionResult> => {
-    return endpoint.put(updatedUser, "");
+    return putViewModelEndpoint.put(updatedUser, "");
   }
 };

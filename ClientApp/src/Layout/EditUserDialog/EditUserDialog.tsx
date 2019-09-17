@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -30,6 +30,17 @@ const EditUserDialog: React.FC<Props> = ({ open, handleClose }: Props) => {
   const [lastName, setLastName] = useState<string>("");
   const [handle, setHandle] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    (async () => {
+      let user = await userManager.get();
+      if (user) {
+        setFirstName(user.firstName);
+        setLastName(user.lastName);
+        setHandle(user.handle);
+      }
+    })();
+  }, []);
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
     const { id, value } = e.currentTarget;
