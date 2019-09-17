@@ -36,5 +36,10 @@ namespace Chatt.Data
             }
             return null;
         }
+
+        public async Task<IdentityResult> UpdateUserAsync(ApplicationUser user)
+        {
+            return await _userManager.UpdateAsync(user);
+        }
     }
 }
