@@ -1,6 +1,6 @@
 ﻿import * as React from "react";
 import { TextField } from "@material-ui/core";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 import validateEmail from "../../Utility/validateEmail";
 import { useAuthContext } from "../../Context/AuthContext/useAuthContext";

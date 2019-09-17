@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuthContext } from "../../Context/AuthContext/useAuthContext";
-import { ButtonGroup, IconButton, Dialog } from "@material-ui/core";
+import { ButtonGroup, IconButton } from "@material-ui/core";
 import styled from "@emotion/styled";
 import { Edit, Delete } from "@material-ui/icons";
 import EditMessageDialog from "../EditMessageDialog/EditMessageDialog";

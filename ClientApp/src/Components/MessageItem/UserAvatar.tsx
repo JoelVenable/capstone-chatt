@@ -2,7 +2,6 @@ import React from "react";
 import styled from "@emotion/styled";
 import { myColors } from "../../theme";
 import { Avatar } from "@material-ui/core";
-import { deepOrange } from "@material-ui/core/colors";
 
 const AvatarDiv = styled.div`
   width: 60px;

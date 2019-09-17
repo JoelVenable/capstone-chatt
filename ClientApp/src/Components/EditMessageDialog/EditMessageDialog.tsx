@@ -4,8 +4,6 @@ import {
   DialogTitle,
   DialogContent,
   TextField,
-  FormGroup,
-  FormControlLabel,
   DialogActions,
   Button
 } from "@material-ui/core";

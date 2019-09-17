@@ -35,7 +35,7 @@ const AddGroup: React.FC<Props> = ({ setUpdate }: Props) => {
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
     const { id, value } = e.currentTarget;
-    if (id === "groupName") setNewGroupName(e.currentTarget.value as string);
+    if (id === "groupName") setNewGroupName(value as string);
     if (id === "groupPrivate") setGroupPrivate(!groupPrivate);
     if (id === "groupProtected") setGroupProtected(!groupProtected);
   };
