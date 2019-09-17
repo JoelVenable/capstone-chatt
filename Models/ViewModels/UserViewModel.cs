@@ -24,13 +24,8 @@ namespace Chatt.Models.ViewModels
 
         public bool IsOnline { get; set; }
 
-        public virtual ICollection<Message> Messages { get; set; }
-
-        public virtual ICollection<GroupUser> GroupUsers { get; set; }
-
         public virtual DateTime LastActive { get; set; }
 
-        public virtual ICollection<Reaction> Reactions { get; set; }
 
     }
 }

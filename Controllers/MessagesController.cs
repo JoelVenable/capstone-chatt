@@ -37,14 +37,36 @@ namespace Chatt.Controllers
         {
             //  id is actually a GROUP id.
 
-            var messages = await _context.Messages.Where(m => m.GroupId == id && m.ParentMessageId == null).Include(m => m.Thread).ToListAsync();
+            var messages = await _context.Messages
+                .Where(m => m.GroupId == id && m.ParentMessageId == null)
+                .Include(m => m.Thread)
+                .Include(m => m.Sender)
+                .ToListAsync();
 
             if (messages == null)
             {
                 return NotFound();
             }
 
-            return messages;
+
+            return Ok(messages.Select(msg =>
+            {
+                msg.MessageSender = new UserViewModel()
+                {
+                    Id = msg.Sender.Id,
+                    DateCreated = msg.Sender.DateCreated,
+                    FirstName = msg.Sender.FirstName,
+                    LastName = msg.Sender.LastName,
+                    Handle = msg.Sender.Handle,
+                    ImageUrl = msg.Sender.ImageUrl,
+                    ThumbUrl = msg.Sender.ThumbUrl,
+                    IsOnline = msg.Sender.IsOnline,
+                    LastActive = msg.Sender.LastActive,
+                };
+                msg.Sender = null;
+                return msg;
+
+            }));
         }
 
         // PUT: api/Messages
